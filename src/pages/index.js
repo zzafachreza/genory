@@ -11,7 +11,10 @@ import LossRegister from './register/lossregister';
 import GetStarted from './getStarted';
 import InfoLengkapTubuh from './getStarted/infolengkap';
 import TargetBerat from './getStarted/targetberat';
-
+import RingkasanRencana from './getStarted/ringkasan';
+import ProgramPertama from './Menu/pertama';
+import UpdateBeratBadan from './Menu/updateberat';
+import VideoLatihan from './Menu/video';
 
 
 
@@ -29,9 +32,10 @@ export {
   GetStarted,
   InfoLengkapTubuh,
   TargetBerat,
-
-
-
+  RingkasanRencana,
+  ProgramPertama,
+  UpdateBeratBadan,
+  VideoLatihan,
   
 
 };

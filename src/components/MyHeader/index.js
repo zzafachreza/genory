@@ -19,8 +19,8 @@ export default function MyHeader({ onPress, color = colors.white, title, icon = 
       backgroundColor: colors.primary,
       padding: 20,
       justifyContent: 'center',
-      borderBottomLeftRadius: 40,
-      borderBottomRightRadius: 40,
+      borderBottomLeftRadius: 10,
+      borderBottomRightRadius: 10,
 
     }}>
 

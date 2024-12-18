@@ -17,6 +17,10 @@ import {
   GetStarted,
   InfoLengkapTubuh,
   TargetBerat,
+  RingkasanRencana,
+  ProgramPertama,
+  UpdateBeratBadan,
+  VideoLatihan,
 
 
 
@@ -43,7 +47,7 @@ const MainApp = () => {
 
 export default function Router() {
   return (
-    <Stack.Navigator initialRouteName='InfoLengkap'>
+    <Stack.Navigator initialRouteName='ProgramPertama'>
       <Stack.Screen
         name="Splash"
         component={Splash}
@@ -141,6 +145,44 @@ export default function Router() {
 <Stack.Screen
         name="TargetBerat"
         component={TargetBerat}
+        options={{
+          headerShown: false,
+
+        }}
+      />
+
+
+<Stack.Screen
+        name="RingkasanRencana"
+        component={RingkasanRencana}
+        options={{
+          headerShown: false,
+
+        }}
+      />
+
+
+<Stack.Screen
+        name="ProgramPertama"
+        component={ProgramPertama}
+        options={{
+          headerShown: false,
+
+        }}
+      />
+
+<Stack.Screen
+        name="UpdateBeratBadan"
+        component={UpdateBeratBadan}
+        options={{
+          headerShown: false,
+
+        }}
+      />
+
+<Stack.Screen
+        name="VideoLatihan"
+        component={VideoLatihan}
         options={{
           headerShown: false,
 

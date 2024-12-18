@@ -28,10 +28,6 @@ export default function InfoLengkapTubuh({navigation}) {
 
     const handleKirim = () => {
 
-       // Pastikan tinggi badan dan berat badan dalam bentuk angka
-    const tinggi_badan_number = parseFloat(kirim.tinggi_badan);
-    const berat_badan_number = parseFloat(kirim.berat_badan);
-
     const requiredFields = [
         { field: kirim.tanggal_lahir, message: "Mohon isi tanngal lahir!" },
         { field: kirim.jenis_kelamin, message: "Mohon isi jenis kelamin!" },
@@ -51,58 +47,50 @@ export default function InfoLengkapTubuh({navigation}) {
                 return;
             }
         };
-        console.log("berat Bedan", tinggi_badan_number);
-        console.log("Tinggi Bedan", berat_badan_number);
-        navigation.navigate('TargetBerat', {
-            tinggi_badan: tinggi_badan_number, // Kirim sebagai angka
-            berat_badan: berat_badan_number, // Kirim sebagai angka
-            jenis_kelamin: kirim.jenis_kelamin,
-            tanggal_lahir: kirim.tanggal_lahir,
-        });
-        
-
-        // const formattedDate = new Date(kirim.tanggal_lahir).toISOString().split('T')[0];
-
-        // const dataToSend = {
-        //     ...kirim,
-        //     formattedDate,
     
-        // };
 
-        // console.log("Data yang dikirim:", dataToSend);
+        const formattedDate = new Date(kirim.tanggal_lahir).toISOString().split('T')[0];
+
+        const dataToSend = {
+            ...kirim,
+            formattedDate,
+    
+        };
+
+        console.log("Data yang dikirim:", dataToSend);
         
-        // axios.post(dataToSend, 'API KEY')
-        // .then(response => {
-        //     setLoading(false)
-        //     console.log('Respons dari server:', response);
-        //     if (response.data.status === 200) {
-        //         Alert.alert(MYAPP, "Data berhasil dimasukkan!");
+        axios.post(dataToSend, 'API KEY')
+        .then(response => {
+            setLoading(false)
+            console.log('Respons dari server:', response);
+            if (response.data.status === 200) {
+                Alert.alert(MYAPP, "Data berhasil dimasukkan!");
                 
-        //         navigation.replace("TargetBerat",   {
-        //             jenis_kelamin: kirim.jenis_kelamin || "",
-        //             umur: kirim.tanggal_lahir || "",
-        //             tinggi_badan: kirim.tinggi_badan || "",
-        //             berat_badan: kirim.berat_badan || ""
-        //         });
-        //     } else {
-        //         showMessage({
-        //             type: 'default',
-        //             color: 'white',
-        //             backgroundColor: colors.danger,
-        //             message: 'Gagal memasukkan data, coba lagi.'
-        //         });
-        //     }
-        // })
-        // .catch(error => {
-        //     setLoading(false)
-        //     console.error('Terjadi kesalahan dari server:', error);
-        //     showMessage({
-        //         type: "default",
-        //         color: "white",
-        //         backgroundColor: colors.danger,
-        //         message: "Terjadi kesalahan, coba lagi nanti."
-        //     });
-        // });
+                navigation.replace("TargetBerat",   {
+                    jenis_kelamin: kirim.jenis_kelamin || "",
+                    umur: kirim.tanggal_lahir || "",
+                    tinggi_badan: kirim.tinggi_badan || "",
+                    berat_badan: kirim.berat_badan || ""
+                });
+            } else {
+                showMessage({
+                    type: 'default',
+                    color: 'white',
+                    backgroundColor: colors.danger,
+                    message: 'Gagal memasukkan data, coba lagi.'
+                });
+            }
+        })
+        .catch(error => {
+            setLoading(false)
+            console.error('Terjadi kesalahan dari server:', error);
+            showMessage({
+                type: "default",
+                color: "white",
+                backgroundColor: colors.danger,
+                message: "Terjadi kesalahan, coba lagi nanti."
+            });
+        });
     };
 
    
