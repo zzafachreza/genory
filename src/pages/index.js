@@ -15,6 +15,15 @@ import RingkasanRencana from './getStarted/ringkasan';
 import ProgramPertama from './Menu/pertama';
 import UpdateBeratBadan from './Menu/updateberat';
 import VideoLatihan from './Menu/video';
+import PengingatProgram from './Menu/pengingat';
+import MealPlan from './Menu/mealplean';
+import Konsultasi from './Menu/konsultasi';
+import Telusuri from './Menu/telusuri';
+import FaktaMitos from './Menu/faktamitos';
+import RekomendasiMakanan from './Menu/rekomendasi';
+import AsupanKaloriMakanan from './Menu/asupankalori';
+
+
 
 
 
@@ -36,6 +45,17 @@ export {
   ProgramPertama,
   UpdateBeratBadan,
   VideoLatihan,
+  PengingatProgram,
+  MealPlan,
+  Konsultasi,
+  Telusuri,
+  FaktaMitos,
+RekomendasiMakanan,
+AsupanKaloriMakanan
+
+
+
+  
   
 
 };

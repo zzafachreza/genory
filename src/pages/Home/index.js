@@ -19,7 +19,7 @@ import { MYAPP, apiURL, api_token, getData, storeData } from '../../utils/localS
 import { BackgroundImage } from 'react-native-elements/dist/config';
 import { color } from 'react-native-reanimated';
 import axios from 'axios';
-import moment from 'moment';
+import moment, { weekdays } from 'moment';
 import { useToast } from 'react-native-toast-notifications';
 import MyLoading from '../../components/MyLoading';
 
@@ -175,7 +175,8 @@ export default function Home({ navigation, route }) {
      
     }}>
 
-      <TouchableNativeFeedback>
+    {/* PROGRAM PERTAMA */}
+      <TouchableNativeFeedback onPress={() => navigation.navigate('ProgramPertama', {week: 1})}>
         <View style={{
           padding:10,
           borderRadius:30,
@@ -186,8 +187,8 @@ export default function Home({ navigation, route }) {
         </View>
       </TouchableNativeFeedback>
 
-
-      <TouchableNativeFeedback>
+{/* PROGRAM KEDUA */}
+      <TouchableNativeFeedback onPress={() => navigation.navigate('ProgramPertama', { week: 2 })}>
         <View style={{
           padding:10,
           borderRadius:30,

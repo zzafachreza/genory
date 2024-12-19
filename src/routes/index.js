@@ -21,6 +21,13 @@ import {
   ProgramPertama,
   UpdateBeratBadan,
   VideoLatihan,
+  PengingatProgram,
+  MealPlan,
+  Konsultasi,
+  Telusuri,
+  FaktaMitos,
+  RekomendasiMakanan,
+  AsupanKaloriMakanan,
 
 
 
@@ -40,6 +47,10 @@ const MainApp = () => {
   return (
     <Tab.Navigator initialRouteName='Produk' tabBar={props => <BottomNavigator {...props} />}>
       <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Rencana" component={ProgramPertama} initialParams={{week: 1}} />
+      <Tab.Screen name="Konsultasi" component={Konsultasi} />
+      <Tab.Screen name="Telusuri" component={Telusuri} />
+      <Tab.Screen name="Profile" component={Account} />
 
     </Tab.Navigator>
   );
@@ -47,7 +58,7 @@ const MainApp = () => {
 
 export default function Router() {
   return (
-    <Stack.Navigator initialRouteName='ProgramPertama'>
+    <Stack.Navigator initialRouteName='PengingatProgram'>
       <Stack.Screen
         name="Splash"
         component={Splash}
@@ -189,6 +200,69 @@ export default function Router() {
         }}
       />
 
+
+<Stack.Screen
+        name="PengingatProgram"
+        component={PengingatProgram}
+        options={{
+          headerShown: false,
+
+        }}
+      />
+
+
+<Stack.Screen
+        name="MealPlan"
+        component={MealPlan}
+        options={{
+          headerShown: false,
+
+        }}
+      />
+
+<Stack.Screen
+        name="Konsultasi"
+        component={MainApp}
+        options={{
+          headerShown: false,
+
+        }}
+      />
+
+<Stack.Screen
+        name="Telusuri"
+        component={MainApp}
+        options={{
+          headerShown: false,
+
+        }}
+      />
+
+<Stack.Screen
+        name="FaktaMitos"
+        component={FaktaMitos}
+        options={{
+          headerShown: false,
+
+        }}
+      />
+
+<Stack.Screen
+        name="RekomendasiMakananSehat"
+        component={RekomendasiMakanan}
+        options={{
+          headerShown: false,
+
+        }}
+      />
+<Stack.Screen
+        name="AsupanKaloriTambahan"
+        component={AsupanKaloriMakanan}
+        options={{
+          headerShown: false,
+
+        }}
+      />
 
       <Stack.Screen
         name="AccountEdit"

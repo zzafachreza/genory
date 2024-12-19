@@ -35,7 +35,7 @@ export default function ({ navigation, route }) {
 
         if (isFocused) {
             getData('user').then(res => {
-                console.log(res)
+                
                 setOpen(true);
                 setUser(res);
 
@@ -119,47 +119,235 @@ export default function ({ navigation, route }) {
                         flex: 1,
                     }}>
                         <View style={{
-                            justifyContent: 'center',
-                            alignItems: 'center'
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            flexDirection:"row",
+                            padding:10
+
                         }}>
                             <View style={{
-                                width: 100,
-                                height: 100,
+                                width: 60,
+                                height: 60,
                                 borderWidth: 1,
-                                borderColor: Color.blueGray[100],
+                                borderColor: colors.primary,
                                 overflow: 'hidden',
-                                borderRadius: 20,
+                                borderRadius: 100,
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }}>
 
-                                <Image source={{
-                                    uri: user.foto_user
-                                }} style={{
-                                    width: 100,
-                                    height: 100,
+                                <Image source={require('../../assets/profile.jpg')} style={{
+                                    width: 55,
+                                    height: 55,
+                                    borderRadius:100
 
                                 }} />
 
                             </View>
+
+                            <View style={{
+                                marginLeft:20
+                            }}>
+                                <Text style={{
+                                    fontFamily:fonts.primary[600],
+                                    fontSize:15,
+                                    color:colors.primary,
+
+                                }}>Halo Kak Jone Done</Text>
+
+                                 <Text style={{
+                                    fontFamily:fonts.primary[400],
+                                    fontSize:13,
+                                    color:Color.blueGray[400],
+
+                                }}>Testing Weight Gain Program</Text>
+                            </View>
                         </View>
                         <View style={{ padding: 10, }}>
-                            <MyList label="Nama Lengkap" value={user.nama_lengkap} />
-                            <MyList label="Username" value={user.username} />
-                            <MyList label="Telepon" value={user.telepon} />
-                            <MyList label="Jenis Kelamin" value={user.jenis_kelamin} />
-                            <MyList label="Tanggal Lahir" value={moment(user.tanggal_lahir).format('dddd, DD MMMM YYYY') + ' ( ' + moment().diff(user.tanggal_lahir, 'year') + ' Tahun )'} />
+                           
                         </View>
                         {/* data detail */}
                     </View>
 
                 }
+
+                <View style={{
+                    padding:10,
+                }}>
+
+                <View style={{
+                    flexDirection:'row',
+                    justifyContent:"space-between",
+                    flexWrap:'wrap',
+                    alignItems:"center"
+                }}>
+
+                {/* PROGRES */}
+
+                <View style={{
+                    padding:10,
+                    width:160,
+                    backgroundColor:colors.primary,
+                    borderRadius:10,
+                    marginTop:10
+                }}>
+                <Text style={{
+                    fontFamily:fonts.primary[700],
+                    color:colors.white,
+                    fontSize:15,
+                    textAlign:"center"
+                }}>Progres Saya</Text>
+                <Text>{``}</Text>
+                </View>
+
+                {/* USIA */}
+                <View style={{
+                    padding:10,
+                    width:160,
+                    backgroundColor:colors.primary,
+                    borderRadius:10
+                }}>
+                <Text style={{
+                    fontFamily:fonts.primary[700],
+                    color:colors.white,
+                    fontSize:15,
+                    textAlign:"center"
+                }}>Usia</Text>
+                <Text>{``}</Text>
+                </View>
+
+
+                {/* Berat Badan */}
+                <View style={{
+                    padding:10,
+                    width:160,
+                    backgroundColor:colors.primary,
+                    borderRadius:10,
+                    marginTop:10
+                }}>
+                <Text style={{
+                    fontFamily:fonts.primary[700],
+                    color:colors.white,
+                    fontSize:15,
+                    textAlign:"center"
+                }}>Berat Badan</Text>
+                <Text>{``}</Text>
+                </View>
+                
+                {/* TINGGI BADAN */}
+                <View style={{
+                    padding:10,
+                    width:160,
+                    backgroundColor:colors.primary,
+                    borderRadius:10
+                }}>
+                <Text style={{
+                    fontFamily:fonts.primary[700],
+                    color:colors.white,
+                    fontSize:15,
+                    textAlign:"center"
+                }}>Tinggi Badan</Text>
+                <Text>{``}</Text>
+                </View>
+
+                {/* JENIS KELAIN */}
+                <View style={{
+                    padding:10,
+                    width:160,
+                    backgroundColor:colors.primary,
+                    borderRadius:10,
+                    marginTop:10
+                }}>
+                <Text style={{
+                    fontFamily:fonts.primary[700],
+                    color:colors.white,
+                    fontSize:15,
+                    textAlign:"center"
+                }}>Jenis Kelamin</Text>
+                <Text>{``}</Text>
+                </View>
+
+
+                {/*  TARGRT */}
+                <View style={{
+                    padding:10,
+                    width:160,
+                    backgroundColor:colors.primary,
+                    borderRadius:10,
+                    marginTop:10
+                }}>
+                <Text style={{
+                    fontFamily:fonts.primary[700],
+                    color:colors.white,
+                    fontSize:15,
+                    textAlign:"center"
+                }}>Target Kamu</Text>
+                <Text>{``}</Text>
+                </View>
+
+                </View>
+
+                {/* Indesk masa tubuh */}
+
+                <View style={{
+                    padding:10,
+                    borderWidth:1,
+                    borderColor:colors.primary,
+                    borderRadius:10,
+                    marginTop:20
+                }}>
+
+                <Text style={{
+                    fontFamily:fonts.primary[600],
+                    fontSize:15,
+                    color:colors.primary,
+                }}>Indeks Masa Tubuh</Text>
+
+                </View>
+
+
+                {/* Perjalanan kamu */}
+                <View style={{
+                    padding:10,
+                    borderWidth:1,
+                    borderColor:colors.primary,
+                    borderRadius:10,
+                    marginTop:20
+                }}>
+
+                <Text style={{
+                    fontFamily:fonts.primary[600],
+                    fontSize:15,
+                    color:colors.primary,
+                }}>Perjalanan Kamu</Text>
+
+                </View>
+
+                {/*  HASIL RENCANA KAMU */}
+                <View style={{
+                    padding:10,
+                    borderWidth:1,
+                    borderColor:colors.primary,
+                    borderRadius:10,
+                    marginTop:20
+                }}>
+
+                <Text style={{
+                    fontFamily:fonts.primary[600],
+                    fontSize:15,
+                    color:colors.primary,
+                }}>Hasil Rencana Kamu</Text>
+
+                </View>
+
+
+                </View>
                 <View style={{
                     padding: 20,
                 }}>
                     <MyButton warna={colors.primary} title="Edit Profile" Icons="create-outline" onPress={() => navigation.navigate('AccountEdit', user)} />
                     <MyGap jarak={10} />
-                    <MyButton onPress={btnKeluar} warna={colors.secondary} title="Log Out" Icons="log-out-outline" iconColor={colors.white} colorText={colors.white} />
+                    <MyButton onPress={btnKeluar} warna={Color.blueGray[300]} title="Log Out" Icons="log-out-outline" iconColor={colors.white} colorText={colors.white} />
                 </View>
             </ScrollView>
         </SafeAreaView >
