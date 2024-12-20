@@ -200,7 +200,7 @@ export default function Home({ navigation, route }) {
         </View>
       </TouchableNativeFeedback>
 
-      <TouchableNativeFeedback>
+      <TouchableNativeFeedback onPress={() => navigation.navigate('MealPlan')}>
         <View style={{
           padding:10,
           borderRadius:30,

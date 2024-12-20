@@ -1,44 +1,96 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, ImageBackground, ScrollView, Image, TouchableNativeFeedback } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  View,
+  Text,
+  ImageBackground,
+  ScrollView,
+  Image,
+  TouchableNativeFeedback,
+  Animated,
+  Dimensions,
+  PanResponder
+} from 'react-native';
 import { colors, fonts } from '../../utils';
 
 export default function GetStarted({ navigation }) {
+  const screenWidth = Dimensions.get('window').width;
+  const maxSlide = screenWidth - 100;  // Batas slide panah
+
   const banner = [
-    { 'id': 1, 'image': require('../../assets/banner_getstarted.png') },
-    { 'id': 2, 'image': require('../../assets/banner_getstarted2.png') },
-    { 'id': 3, 'image': require('../../assets/banner_getstarted3.png') },
+    { id: 1, image: require('../../assets/banner_getstarted.png') },
+    { id: 2, image: require('../../assets/banner_getstarted2.png') },
+    { id: 3, image: require('../../assets/banner_getstarted3.png') },
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const arrowPosition = useRef(new Animated.Value(0)).current;
+
+  const backgroundColor = arrowPosition.interpolate({
+    inputRange: [0, maxSlide], // Batas posisi panah agar tidak melampaui layar
+    outputRange: [colors.primary, colors.primary], // Tetap warna primary
+  });
+
+  const textOpacity = arrowPosition.interpolate({
+    inputRange: [0, 30],
+    outputRange: [1, 0],
+  });
 
   useEffect(() => {
     const interval = setInterval(() => {
-      // Pergi ke gambar selanjutnya
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % banner.length);
-    }, 4500); // Ganti gambar setiap 5 detik
+    }, 4500);
 
-    return () => clearInterval(interval); // Bersihkan interval saat komponen unmount
+    return () => clearInterval(interval);
   }, []);
 
+  const handleMove = Animated.event(
+    [
+      null,
+      { dx: arrowPosition },
+    ],
+    { useNativeDriver: false }
+  );
+
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onMoveShouldSetPanResponder: () => true,
+    onPanResponderMove: (e, gestureState) => {
+      // Mengatur posisi panah agar tidak melampaui batas
+      const offsetX = gestureState.dx < 0 ? 0 : (gestureState.dx > maxSlide ? maxSlide : gestureState.dx);
+      arrowPosition.setValue(offsetX);
+    },
+    onPanResponderRelease: (e, gestureState) => {
+      if (gestureState.dx >= maxSlide) {
+        // Jika panah sudah sampai batas, pindahkan ke halaman berikutnya
+        navigation.navigate('InfoLengkap');
+      } else {
+        // Kembalikan posisi panah ke awal
+        Animated.spring(arrowPosition, {
+          toValue: 0,
+          useNativeDriver: false,
+        }).start();
+      }
+    },
+  });
+
   return (
-    <View style={{ flex: 1, backgroundColor: colors.white }}>
-      <ImageBackground source={require('../../assets/bgimg.png')} style={{ flex: 1, width: '100%', height: '100%' }}>
+    <View style={{ flex: 1, backgroundColor: colors.primary }}>
+      <ImageBackground
+        source={require('../../assets/bgimg.png')}
+        style={{ flex: 1, width: '100%', height: '100%' }}
+      >
         <View style={{ padding: 0 }}>
           <ScrollView>
-            {/* BANNER */}
-            <View style={{ alignItems: 'center',
-          
-            }}>
+            <View style={{ alignItems: 'center' }}>
               <Image
                 style={{
                   width: '100%',
                   height: 456,
-                  resizeMode:'cover'
+                  resizeMode: 'cover',
                 }}
                 source={banner[currentImageIndex].image}
               />
             </View>
-            {/* END BANNER */}
 
             <View style={{ alignItems: 'center', marginTop: 12 }}>
               <View style={{ width: 310 }}>
@@ -50,7 +102,7 @@ export default function GetStarted({ navigation }) {
                     textAlign: 'center',
                   }}
                 >
-                 Raih Target Badanmu!
+                  Raih Target Badanmu!
                 </Text>
 
                 <Text
@@ -61,50 +113,54 @@ export default function GetStarted({ navigation }) {
                     textAlign: 'center',
                   }}
                 >
-                Secara sehat dan efektif, melalui program  khusus buat kamu
+                  Secara sehat dan efektif, melalui program khusus buat kamu
                 </Text>
               </View>
             </View>
 
             <View style={{ alignItems: 'center', marginTop: 10 }}>
-              <TouchableNativeFeedback onPress={() => navigation.navigate('KeduaNextSlide')}>
-                <View
+              <Animated.View
+                style={{
+                  padding: 10,
+                  backgroundColor: backgroundColor,
+                  width: 310,
+                  height: 55,
+                  borderRadius: 30,
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}
+                {...panResponder.panHandlers}  // Menambahkan panResponder ke view panah
+              >
+                <Animated.Image
                   style={{
-                    padding: 10,
-                    backgroundColor: colors.primary,
-                    width: 310,
-                    height:55,
-                    borderRadius: 30,
-                    alignItems: 'center',
-                    flexDirection:"row",
-                    justifyContent:'space-between',
+                    width: 44,
+                    height: 44,
+                    marginLeft: arrowPosition,
+                  }}
+                  source={require('../../assets/arror_roundfill.png')}
+                />
+
+                <Animated.Text
+                  style={{
+                    fontFamily: fonts.primary[600],
+                    fontSize: 25,
+                    color: colors.white,
+                    marginRight: '38%',
+                    opacity: textOpacity,
                   }}
                 >
-
-                <Image style={{
-                    width:44,
-                    height:44,
-                    marginLeft:-5
-                }} source={require('../../assets/arror_roundfill.png')}/>
-
-                <Text style={{
-                    fontFamily:fonts.primary[600],
-                    fontSize:25,
-                    color:colors.white,
-                    marginRight:'38%'
-
-                }}>
-                    Mulai
-                </Text>
-                  
-                </View>
-              </TouchableNativeFeedback>
+                  Mulai
+                </Animated.Text>
+              </Animated.View>
             </View>
           </ScrollView>
 
-          {/* Footer */}
           <View style={{ alignItems: 'center', marginTop: 20 }}>
-            <Image style={{ width: 73, height: 29 }} source={require('../../assets/genory.png')} />
+            <Image
+              style={{ width: 73, height: 29 }}
+              source={require('../../assets/genory.png')}
+            />
           </View>
 
           <View>
@@ -130,15 +186,24 @@ export default function GetStarted({ navigation }) {
               }}
             >
               <TouchableNativeFeedback>
-                <Image style={{ width: 24, height: 24 }} source={require('../../assets/instagram.png')} />
+                <Image
+                  style={{ width: 24, height: 24 }}
+                  source={require('../../assets/instagram.png')}
+                />
               </TouchableNativeFeedback>
 
               <TouchableNativeFeedback>
-                <Image style={{ width: 24, height: 24 }} source={require('../../assets/WA.png')} />
+                <Image
+                  style={{ width: 24, height: 24 }}
+                  source={require('../../assets/WA.png')}
+                />
               </TouchableNativeFeedback>
 
               <TouchableNativeFeedback>
-                <Image style={{ width: 24, height: 24 }} source={require('../../assets/tiktok.png')} />
+                <Image
+                  style={{ width: 24, height: 24 }}
+                  source={require('../../assets/tiktok.png')}
+                />
               </TouchableNativeFeedback>
             </View>
           </View>
@@ -152,7 +217,8 @@ export default function GetStarted({ navigation }) {
                 fontSize: 12,
               }}
             >
-              © <Text style={{ fontFamily: fonts.primary[800] }}> 2024</Text> GENORY. All Right Reserved
+              © <Text style={{ fontFamily: fonts.primary[800] }}> 2024</Text>{' '}
+              GENORY. All Right Reserved
             </Text>
           </View>
         </View>

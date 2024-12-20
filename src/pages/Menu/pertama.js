@@ -46,7 +46,7 @@ export default function ProgramPertama({ navigation, route }) {
 
       <ScrollView>
         <View style={{ padding: 10 }}>
-          <TouchableNativeFeedback>
+          <TouchableNativeFeedback onPress={() => navigation.navigate('PengingatProgram')}>
             <View
               style={{
                 padding: 10,

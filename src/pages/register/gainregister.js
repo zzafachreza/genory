@@ -97,7 +97,7 @@ export default function GainRegister({navigation}) {
                     backgroundColor:colors.white,
                 })
             } else {
-                navigation.replace('GetStartedGain');
+                navigation.replace('GetStarted');
                 showMessage({
                     type:'success',
                     message:'Pendaftaran Berhasil!',
@@ -215,7 +215,7 @@ export default function GainRegister({navigation}) {
             <View style={{
                 marginTop:20
             }}>
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={handleKirim}>
                     <View style={{
                         padding:10,
                         backgroundColor:colors.primary,
