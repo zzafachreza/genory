@@ -1,4 +1,4 @@
-import { View, Text, TouchableNativeFeedback, ScrollView, Image, TextInput } from 'react-native';
+import { View, Text, TouchableNativeFeedback, ScrollView, Image, TextInput, Alert } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { colors, fonts } from '../../utils';
 import { MyHeader } from '../../components';
@@ -37,6 +37,12 @@ export default function ProgramPertama({ navigation, route }) {
   const currentDayNumber = Math.ceil(
     (today - startDate) / (1000 * 60 * 60 * 24)
   ); // Calculate the current day number relative to startDate
+
+  const handlePengingatClick = () => {
+    const startDay = currentWeek === 1 ? 1 : 8;
+    const endDay = currentWeek === 1 ? 7 : 14;
+    navigation.navigate('PengingatProgram', { startDay, endDay, currentWeek });
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.white }}>
@@ -83,8 +89,10 @@ export default function ProgramPertama({ navigation, route }) {
       </View>
 
       <ScrollView>
+
+      {/* pengingat */}
         <View style={{ padding: 10 }}>
-          <TouchableNativeFeedback onPress={() => navigation.navigate('PengingatProgram')}>
+          <TouchableNativeFeedback onPress={handlePengingatClick}>
             <View
               style={{
                 padding: 10,
@@ -241,7 +249,6 @@ export default function ProgramPertama({ navigation, route }) {
                         marginLeft: 10, // Posisikan tombol ke kiri
                         zIndex: 10, // Pastikan tombol berada di depan
                         display: 'flex', // Pastikan tombol dapat ditampilkan
-                        left:-10
                       }}
                     >
                       <Text
@@ -400,7 +407,7 @@ export default function ProgramPertama({ navigation, route }) {
                     padding: 10,
                     backgroundColor: colors.primary,
                     borderRadius: 30,
-                    zIndex: 0,
+                    zIndex: 2,
                     marginTop: -30,
                   }}
                 >

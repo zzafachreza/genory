@@ -58,7 +58,7 @@ const MainApp = () => {
 
 export default function Router() {
   return (
-    <Stack.Navigator initialRouteName='RingkasanRencana'>
+    <Stack.Navigator initialRouteName=''>
       <Stack.Screen
         name="Splash"
         component={Splash}

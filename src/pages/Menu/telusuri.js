@@ -312,7 +312,7 @@ export default function Telusuri({ navigation }) {
                         borderRadius: 20,
                         marginRight: 10,
                         alignItems: 'center',
-                        borderWidth: 1,
+                      
                         marginTop:10,
                         
                       }}

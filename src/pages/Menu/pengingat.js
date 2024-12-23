@@ -3,10 +3,15 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-nati
 import { colors, fonts } from '../../utils';
 import { MyHeader } from '../../components';
 
-export default function PengingatProgram({ navigation }) {
-  const [switchStates, setSwitchStates] = useState(
-    Array(14).fill(false) // Array dengan 14 elemen, default semuanya false
-  );
+export default function PengingatProgram({ navigation, route }) {
+  const { startDay, endDay, currentWeek } = route.params; 
+  console.log('Current Week:', currentWeek);
+console.log('Active Days:', activeDays);
+  const [switchStates, setSwitchStates] = useState(Array(14).fill(false)); // Array untuk status switch
+  const currentStage = currentWeek === 1 ? 1 : 2;
+  // Logika untuk menentukan tahapan aktif (misalnya dari data atau waktu)
+  // Di sini diasumsikan tahapan diatur secara manual untuk simulasi
+  const activeDays = currentStage === 1 ? [1, 2, 3, 4, 5, 6, 7] : [8, 9, 10, 11, 12, 13, 14];
 
   const toggleSwitch = (index) => {
     const updatedStates = [...switchStates];
@@ -19,35 +24,33 @@ export default function PengingatProgram({ navigation }) {
       <MyHeader onPress={() => navigation.goBack()} title="Pengingat" />
 
       <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
-        {Array.from({ length: 14 }).map((_, index) => {
-          const day = index + 1;
-          const week = day <= 7 ? 'Minggu Pertama' : 'Minggu Kedua';
-
-          return (
-            <View key={index} style={styles.row}>
-              <View>
-                <Text style={styles.timeText}>09.00</Text>
-                <Text style={styles.dayText}>Hari ke {day} | {week}</Text>
-              </View>
-
-              {/* Custom Switch */}
-              <TouchableOpacity
-                style={[
-                  styles.switchContainer,
-                  switchStates[index] ? styles.switchEnabled : styles.switchDisabled,
-                ]}
-                onPress={() => toggleSwitch(index)}
-              >
-                <View
-                  style={[
-                    styles.switchThumb,
-                    switchStates[index] ? styles.thumbEnabled : styles.thumbDisabled,
-                  ]}
-                />
-              </TouchableOpacity>
+        {/* Tampilkan hanya hari yang sesuai tahapan aktif */}
+        {activeDays.map((day) => (
+          <View key={day} style={styles.row}>
+            <View>
+              <Text style={styles.timeText}>09.00</Text>
+              <Text style={styles.dayText}>
+                Hari ke {day} | {currentStage === 1 ? 'Minggu  Pertama' : 'Minggu Kedua'}
+              </Text>
             </View>
-          );
-        })}
+
+            {/* Custom Switch */}
+            <TouchableOpacity
+              style={[
+                styles.switchContainer,
+                switchStates[day - 1] ? styles.switchEnabled : styles.switchDisabled,
+              ]}
+              onPress={() => toggleSwitch(day - 1)}
+            >
+              <View
+                style={[
+                  styles.switchThumb,
+                  switchStates[day - 1] ? styles.thumbEnabled : styles.thumbDisabled,
+                ]}
+              />
+            </TouchableOpacity>
+          </View>
+        ))}
       </ScrollView>
     </View>
   );
@@ -78,29 +81,29 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   switchContainer: {
-    width: 50, // Panjang switch
-    height: 25, // Tinggi switch
-    borderRadius: 25, // Membuat ujung melingkar
+    width: 50,
+    height: 25,
+    borderRadius: 25,
     justifyContent: 'center',
-    padding: 3, // Memberi ruang untuk thumb
+    padding: 3,
   },
   switchEnabled: {
-    backgroundColor: '#808040', // Warna hijau seperti di gambar
+    backgroundColor: '#808040',
   },
   switchDisabled: {
-    backgroundColor: '#f5f5f5', // Warna default
+    backgroundColor: '#f5f5f5',
   },
   switchThumb: {
-    width: 20, // Diameter thumb
-    height: 20, // Diameter thumb
-    borderRadius: 10, // Membuat thumb bulat
+    width: 20,
+    height: 20,
+    borderRadius: 10,
   },
   thumbEnabled: {
-    backgroundColor: colors.white, // Warna thumb saat aktif
-    alignSelf: 'flex-end', // Posisi di kanan
+    backgroundColor: colors.white,
+    alignSelf: 'flex-end',
   },
   thumbDisabled: {
-    backgroundColor: colors.white, // Warna thumb saat nonaktif
-    alignSelf: 'flex-start', // Posisi di kiri
+    backgroundColor: colors.white,
+    alignSelf: 'flex-start',
   },
 });
