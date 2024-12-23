@@ -1,43 +1,54 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { colors, fonts } from '../../utils';
 import { MyHeader } from '../../components';
 
 export default function PengingatProgram({ navigation }) {
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [switchStates, setSwitchStates] = useState(
+    Array(14).fill(false) // Array dengan 14 elemen, default semuanya false
+  );
 
-  const toggleSwitch = () => setIsEnabled(!isEnabled);
+  const toggleSwitch = (index) => {
+    const updatedStates = [...switchStates];
+    updatedStates[index] = !updatedStates[index]; // Toggle nilai switch berdasarkan index
+    setSwitchStates(updatedStates);
+  };
 
   return (
     <View style={styles.container}>
       <MyHeader onPress={() => navigation.goBack()} title="Pengingat" />
 
-      <View style={styles.row}>
-       <View>
-       <Text style={styles.timeText}>09.00</Text>
-       <Text style={{
-        fontFamily:fonts.primary[400],
-        fontSize:13,
-        color:colors.primary
-       }}>Hari ke 1 | Minggu Petama</Text>
-       </View>
+      <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
+        {Array.from({ length: 14 }).map((_, index) => {
+          const day = index + 1;
+          const week = day <= 7 ? 'Minggu Pertama' : 'Minggu Kedua';
 
-        {/* Custom Switch */}
-        <TouchableOpacity
-          style={[
-            styles.switchContainer,
-            isEnabled ? styles.switchEnabled : styles.switchDisabled,
-          ]}
-          onPress={toggleSwitch}
-        >
-          <View
-            style={[
-              styles.switchThumb,
-              isEnabled ? styles.thumbEnabled : styles.thumbDisabled,
-            ]}
-          />
-        </TouchableOpacity>
-      </View>
+          return (
+            <View key={index} style={styles.row}>
+              <View>
+                <Text style={styles.timeText}>09.00</Text>
+                <Text style={styles.dayText}>Hari ke {day} | {week}</Text>
+              </View>
+
+              {/* Custom Switch */}
+              <TouchableOpacity
+                style={[
+                  styles.switchContainer,
+                  switchStates[index] ? styles.switchEnabled : styles.switchDisabled,
+                ]}
+                onPress={() => toggleSwitch(index)}
+              >
+                <View
+                  style={[
+                    styles.switchThumb,
+                    switchStates[index] ? styles.thumbEnabled : styles.thumbDisabled,
+                  ]}
+                />
+              </TouchableOpacity>
+            </View>
+          );
+        })}
+      </ScrollView>
     </View>
   );
 }
@@ -49,15 +60,22 @@ const styles = StyleSheet.create({
   },
   row: {
     padding: 15,
-    marginTop: 20,
+    marginTop: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E5E5',
   },
   timeText: {
     fontSize: 25,
-    fontFamily:fonts.primary[600],
-    color:colors.primary
+    fontFamily: fonts.primary[600],
+    color: colors.primary,
+  },
+  dayText: {
+    fontFamily: fonts.primary[400],
+    fontSize: 13,
+    color: colors.primary,
   },
   switchContainer: {
     width: 50, // Panjang switch

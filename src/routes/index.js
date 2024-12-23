@@ -46,7 +46,7 @@ const Stack = createStackNavigator();
 const MainApp = () => {
   return (
     <Tab.Navigator initialRouteName='Produk' tabBar={props => <BottomNavigator {...props} />}>
-      <Tab.Screen name="Home" component={Home} />
+      <Tab.Screen name="Program" component={Home} />
       <Tab.Screen name="Rencana" component={ProgramPertama} initialParams={{week: 1}} />
       <Tab.Screen name="Konsultasi" component={Konsultasi} />
       <Tab.Screen name="Telusuri" component={Telusuri} />

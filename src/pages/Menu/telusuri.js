@@ -88,10 +88,12 @@ export default function Telusuri({ navigation }) {
                       style={{
                         backgroundColor: category.color,
                         padding: 10,
-                        borderRadius: 8,
+                        borderRadius: 20,
                         marginRight: 10,
                         alignItems: 'center',
-                        borderWidth: 1,
+                       
+                        width:83,
+                        height:35
                       }}
                     >
                       <Text
@@ -307,11 +309,12 @@ export default function Telusuri({ navigation }) {
                       style={{
                         backgroundColor: rekomendasi.color,
                         padding: 10,
-                        borderRadius: 8,
+                        borderRadius: 20,
                         marginRight: 10,
                         alignItems: 'center',
                         borderWidth: 1,
-                        marginTop:10
+                        marginTop:10,
+                        
                       }}
                     >
                       <Text

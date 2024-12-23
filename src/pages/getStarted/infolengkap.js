@@ -195,7 +195,7 @@ export default function InfoLengkapTubuh({navigation}) {
                             textAlign:'center',
                             color:colors.white
                         }}>
-                                Lanjutkan Program
+                                Selanjutnya
                         </Text>
                     </View>
                 </TouchableWithoutFeedback>

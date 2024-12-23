@@ -16,7 +16,7 @@ export default function BottomNavigator({ state, descriptors, navigation }) {
   // Map label to corresponding images and sizes
   const getImageDetails = (label) => {
     switch (label) {
-      case 'Home':
+      case 'Program':
         return { source: require('../../assets/program_bottom.png'), width: 26, height: 26 };
       case 'Rencana':
         return { source: require('../../assets/rencana_bottom.png'), width: 31, height: 28 };

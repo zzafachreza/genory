@@ -175,7 +175,7 @@ export default function GainRegister({navigation}) {
             <MyInput
              placeholder="Isi Email"
               backgroundColor='#F7F7F7' 
-              label="Emai"
+              label="Email"
                 value={kirim.email}
                 onChangeText={(x) => setKirim({...kirim, 'email' : x})}
               />

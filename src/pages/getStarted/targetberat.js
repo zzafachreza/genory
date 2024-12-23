@@ -77,7 +77,7 @@ export default function TargetBerat({ navigation, }) {
            <View style={{
             marginTop:-20
            }}>
-           <MyInput placeholder="" />
+           <MyInput keyboardType='numeric' placeholder="" />
            </View>
 
             </View>
@@ -91,7 +91,7 @@ export default function TargetBerat({ navigation, }) {
             marginTop:-20,
             
           }}>
-          <MyInput placeholder="" />
+          <MyInput keyboardType='numeric' placeholder="" />
           </View>
 
             </View>
