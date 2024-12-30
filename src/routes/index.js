@@ -28,6 +28,8 @@ import {
   FaktaMitos,
   RekomendasiMakanan,
   AsupanKaloriMakanan,
+  VideoData,
+  VideoDetail,
 
 
 
@@ -47,7 +49,7 @@ const MainApp = () => {
   return (
     <Tab.Navigator initialRouteName='Produk' tabBar={props => <BottomNavigator {...props} />}>
       <Tab.Screen name="Program" component={Home} />
-      <Tab.Screen name="Rencana" component={ProgramPertama} initialParams={{week: 1}} />
+      <Tab.Screen name="Rencana" component={ProgramPertama} initialParams={{ week: 1 }} />
       <Tab.Screen name="Konsultasi" component={Konsultasi} />
       <Tab.Screen name="Telusuri" component={Telusuri} />
       <Tab.Screen name="Profile" component={Account} />
@@ -58,7 +60,7 @@ const MainApp = () => {
 
 export default function Router() {
   return (
-    <Stack.Navigator initialRouteName=''>
+    <Stack.Navigator initialRouteName='Splash'>
       <Stack.Screen
         name="Splash"
         component={Splash}
@@ -89,8 +91,27 @@ export default function Router() {
         }}
       />
 
+      <Stack.Screen
+        name="VideoData"
+        component={VideoData}
+        options={{
+          headerShown: false,
 
-<Stack.Screen
+        }}
+      />
+
+
+      <Stack.Screen
+        name="VideoDetail"
+        component={VideoDetail}
+        options={{
+          headerShown: false,
+
+        }}
+      />
+
+
+      <Stack.Screen
         name="Petunjuk"
         component={Petunjuk}
         options={{
@@ -99,7 +120,7 @@ export default function Router() {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="PertamaNextSlide"
         component={PertamaNextSlide}
         options={{
@@ -108,7 +129,7 @@ export default function Router() {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="KeduaNextSlide"
         component={KeduaNextSlide}
         options={{
@@ -116,7 +137,7 @@ export default function Router() {
 
         }}
       />
-<Stack.Screen
+      <Stack.Screen
         name="GainRegister"
         component={GainRegister}
         options={{
@@ -125,7 +146,7 @@ export default function Router() {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="LossRegister"
         component={LossRegister}
         options={{
@@ -135,7 +156,7 @@ export default function Router() {
       />
 
 
-<Stack.Screen
+      <Stack.Screen
         name="GetStarted"
         component={GetStarted}
         options={{
@@ -144,7 +165,7 @@ export default function Router() {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="InfoLengkap"
         component={InfoLengkapTubuh}
         options={{
@@ -153,7 +174,7 @@ export default function Router() {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="TargetBerat"
         component={TargetBerat}
         options={{
@@ -163,7 +184,7 @@ export default function Router() {
       />
 
 
-<Stack.Screen
+      <Stack.Screen
         name="RingkasanRencana"
         component={RingkasanRencana}
         options={{
@@ -173,7 +194,7 @@ export default function Router() {
       />
 
 
-<Stack.Screen
+      <Stack.Screen
         name="ProgramPertama"
         component={ProgramPertama}
         options={{
@@ -182,7 +203,7 @@ export default function Router() {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="UpdateBeratBadan"
         component={UpdateBeratBadan}
         options={{
@@ -191,7 +212,7 @@ export default function Router() {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="VideoLatihan"
         component={VideoLatihan}
         options={{
@@ -201,7 +222,7 @@ export default function Router() {
       />
 
 
-<Stack.Screen
+      <Stack.Screen
         name="PengingatProgram"
         component={PengingatProgram}
         options={{
@@ -211,7 +232,7 @@ export default function Router() {
       />
 
 
-<Stack.Screen
+      <Stack.Screen
         name="MealPlan"
         component={MealPlan}
         options={{
@@ -220,7 +241,7 @@ export default function Router() {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="Konsultasi"
         component={MainApp}
         options={{
@@ -229,7 +250,7 @@ export default function Router() {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="Telusuri"
         component={MainApp}
         options={{
@@ -238,7 +259,7 @@ export default function Router() {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="FaktaMitos"
         component={FaktaMitos}
         options={{
@@ -247,7 +268,7 @@ export default function Router() {
         }}
       />
 
-<Stack.Screen
+      <Stack.Screen
         name="RekomendasiMakananSehat"
         component={RekomendasiMakanan}
         options={{
@@ -255,7 +276,7 @@ export default function Router() {
 
         }}
       />
-<Stack.Screen
+      <Stack.Screen
         name="AsupanKaloriTambahan"
         component={AsupanKaloriMakanan}
         options={{

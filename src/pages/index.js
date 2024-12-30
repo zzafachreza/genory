@@ -22,6 +22,8 @@ import Telusuri from './Menu/telusuri';
 import FaktaMitos from './Menu/faktamitos';
 import RekomendasiMakanan from './Menu/rekomendasi';
 import AsupanKaloriMakanan from './Menu/asupankalori';
+import VideoData from './Menu/VideoData';
+import VideoDetail from './Menu/VideoDetail';
 
 
 
@@ -50,12 +52,14 @@ export {
   Konsultasi,
   Telusuri,
   FaktaMitos,
-RekomendasiMakanan,
-AsupanKaloriMakanan
+  RekomendasiMakanan,
+  AsupanKaloriMakanan,
+  VideoData,
+  VideoDetail
 
 
 
-  
-  
+
+
 
 };

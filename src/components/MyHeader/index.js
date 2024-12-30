@@ -7,6 +7,12 @@ import { getData } from '../../utils/localStorage';
 import MyMenu from '../MyMenu';
 export default function MyHeader({ onPress, color = colors.white, title, icon = false, iconname = 'search' }) {
   const navigation = useNavigation();
+
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    getData('user').then(u => setUser(u));
+  }, [])
+
   return (
 
 
@@ -14,10 +20,9 @@ export default function MyHeader({ onPress, color = colors.white, title, icon = 
       marginTop: 0,
       marginHorizontal: 0,
       flexDirection: 'row',
-      alignItems: 'flex-end',
-      paddingVertical: 20,
-      backgroundColor: colors.primary,
-      padding: 20,
+      alignItems: 'center',
+      backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+      paddingHorizontal: 10,
       justifyContent: 'center',
       borderBottomLeftRadius: 10,
       borderBottomRightRadius: 10,
@@ -25,21 +30,22 @@ export default function MyHeader({ onPress, color = colors.white, title, icon = 
     }}>
 
       <TouchableOpacity onPress={() => navigation.goBack()} style={{
-
-
+        // backgroundColor: 'red',
+        height: 70,
+        width: 70,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 10,
+        // padding: 10,
       }}>
-        <Icon type='ionicon' name='arrow-back-outline' size={20} color={color} />
+        <Icon type='ionicon' name='arrow-back-outline' size={24} color={color} />
       </TouchableOpacity>
 
 
       <Text style={{
-        ...fonts.headline2,
+        ...fonts.headline4,
         flex: 1,
         textAlign: 'center',
-        marginLeft: -20,
+        marginLeft: -50,
 
         color: color
       }}>{title}</Text>

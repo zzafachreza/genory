@@ -8,13 +8,29 @@ import {
   TouchableNativeFeedback,
   Animated,
   Dimensions,
-  PanResponder
+  PanResponder,
+  Linking,
+  TouchableWithoutFeedback,
+  TouchableOpacity
 } from 'react-native';
 import { colors, fonts } from '../../utils';
+import { apiURL, getData, webURL } from '../../utils/localStorage';
+import axios from 'axios';
 
 export default function GetStarted({ navigation }) {
   const screenWidth = Dimensions.get('window').width;
   const maxSlide = screenWidth - 100;  // Batas slide panah
+  const [data, setData] = useState([
+    {
+      id: 1,
+      gambar: ''
+    }
+  ]);
+  const [medsos, setMedsos] = useState({
+    instagram: '',
+    tiktok: '',
+    whatsapp: '',
+  });
 
   const banner = [
     { id: 1, image: require('../../assets/banner_getstarted.png') },
@@ -29,13 +45,36 @@ export default function GetStarted({ navigation }) {
     inputRange: [0, maxSlide], // Batas posisi panah agar tidak melampaui layar
     outputRange: [colors.primary, colors.primary], // Tetap warna primary
   });
+  const [user, setUser] = useState({});
 
   const textOpacity = arrowPosition.interpolate({
     inputRange: [0, 30],
     outputRange: [1, 0],
   });
 
+  const __GetSlider = () => {
+    axios.post(apiURL + 'slider', {
+      posisi: 'Opening'
+    }).then(res => {
+      console.log(res.data);
+      setData(res.data)
+    })
+  }
+
+  const __GetMedsos = () => {
+    axios.post(apiURL + 'medsos').then(res => {
+      console.log(res.data);
+      setMedsos(res.data)
+    })
+  }
+
   useEffect(() => {
+    getData('user').then(res => {
+      setUser(res);
+      // console.log(res)
+    })
+    __GetSlider();
+    __GetMedsos();
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % banner.length);
     }, 4500);
@@ -62,7 +101,7 @@ export default function GetStarted({ navigation }) {
     onPanResponderRelease: (e, gestureState) => {
       if (gestureState.dx >= maxSlide) {
         // Jika panah sudah sampai batas, pindahkan ke halaman berikutnya
-        navigation.navigate('InfoLengkap');
+        navigation.navigate('TargetBerat');
       } else {
         // Kembalikan posisi panah ke awal
         Animated.spring(arrowPosition, {
@@ -79,8 +118,9 @@ export default function GetStarted({ navigation }) {
         source={require('../../assets/bgimg.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
-        <View style={{ padding: 0 }}>
-          <ScrollView>
+        <ScrollView>
+          <View style={{ padding: 0 }}>
+
             <View style={{ alignItems: 'center' }}>
               <Image
                 style={{
@@ -88,7 +128,9 @@ export default function GetStarted({ navigation }) {
                   height: 456,
                   resizeMode: 'cover',
                 }}
-                source={banner[currentImageIndex].image}
+                source={{
+                  uri: webURL + data[currentImageIndex].gambar
+                }}
               />
             </View>
 
@@ -118,111 +160,114 @@ export default function GetStarted({ navigation }) {
               </View>
             </View>
 
-            <View style={{ alignItems: 'center', marginTop: 10 }}>
-              <Animated.View
-                style={{
-                  padding: 10,
-                  backgroundColor: backgroundColor,
-                  width: 310,
-                  height: 55,
-                  borderRadius: 30,
-                  alignItems: 'center',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-                {...panResponder.panHandlers}  // Menambahkan panResponder ke view panah
-              >
-                <Animated.Image
+            <TouchableOpacity onPress={() => navigation.navigate('RingkasanRencana')}>
+              <View style={{ alignItems: 'center', marginTop: 10 }}>
+                <Animated.View
                   style={{
-                    width: 44,
-                    height: 44,
-                    marginLeft: arrowPosition,
+                    padding: 10,
+                    backgroundColor: backgroundColor,
+                    width: 310,
+                    height: 55,
+                    borderRadius: 30,
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
                   }}
-                  source={require('../../assets/arror_roundfill.png')}
-                />
-
-                <Animated.Text
-                  style={{
-                    fontFamily: fonts.primary[600],
-                    fontSize: 25,
-                    color: colors.white,
-                    marginRight: '38%',
-                    opacity: textOpacity,
-                  }}
+                  {...panResponder.panHandlers}  // Menambahkan panResponder ke view panah
                 >
-                  Mulai
-                </Animated.Text>
-              </Animated.View>
+                  <Animated.Image
+                    style={{
+                      width: 44,
+                      height: 44,
+                      marginLeft: arrowPosition,
+                    }}
+                    source={require('../../assets/arror_roundfill.png')}
+                  />
+
+                  <Animated.Text
+                    style={{
+                      fontFamily: fonts.primary[600],
+                      fontSize: 25,
+                      color: colors.white,
+                      marginRight: '38%',
+                      opacity: textOpacity,
+                    }}
+                  >
+                    Mulai
+                  </Animated.Text>
+                </Animated.View>
+              </View>
+
+            </TouchableOpacity>
+
+            <View style={{ alignItems: 'center', marginTop: 20 }}>
+              <Image
+                style={{ width: 73, height: 29 }}
+                source={require('../../assets/genory.png')}
+              />
             </View>
-          </ScrollView>
 
-          <View style={{ alignItems: 'center', marginTop: 20 }}>
-            <Image
-              style={{ width: 73, height: 29 }}
-              source={require('../../assets/genory.png')}
-            />
-          </View>
+            <View>
+              <Text
+                style={{
+                  fontFamily: fonts.primary[500],
+                  fontSize: 15,
+                  textAlign: 'center',
+                  color: colors.primary,
+                }}
+              >
+                Make The Look You Want With, Genory!
+              </Text>
+            </View>
 
-          <View>
-            <Text
-              style={{
-                fontFamily: fonts.primary[500],
-                fontSize: 15,
-                textAlign: 'center',
-                color: colors.primary,
-              }}
-            >
-              Make The Look You Want With, Genory!
-            </Text>
-          </View>
+            <View style={{ alignItems: 'center', marginTop: 20 }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  alignItems: 'center',
+                  width: 159,
+                }}
+              >
+                <TouchableNativeFeedback onPress={() => Linking.openURL(medsos.instagram)}>
+                  <Image
+                    style={{ width: 24, height: 24 }}
+                    source={require('../../assets/instagram.png')}
+                  />
+                </TouchableNativeFeedback>
 
-          <View style={{ alignItems: 'center', marginTop: 20 }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-                alignItems: 'center',
-                width: 159,
-              }}
-            >
-              <TouchableNativeFeedback>
-                <Image
-                  style={{ width: 24, height: 24 }}
-                  source={require('../../assets/instagram.png')}
-                />
-              </TouchableNativeFeedback>
+                <TouchableNativeFeedback onPress={() => Linking.openURL(medsos.whatsapp)}>
+                  <Image
+                    style={{ width: 24, height: 24 }}
+                    source={require('../../assets/WA.png')}
+                  />
+                </TouchableNativeFeedback>
 
-              <TouchableNativeFeedback>
-                <Image
-                  style={{ width: 24, height: 24 }}
-                  source={require('../../assets/WA.png')}
-                />
-              </TouchableNativeFeedback>
+                <TouchableNativeFeedback onPress={() => Linking.openURL(medsos.tiktok)}>
+                  <Image
+                    style={{ width: 24, height: 24 }}
+                    source={require('../../assets/tiktok.png')}
+                  />
+                </TouchableNativeFeedback>
+              </View>
+            </View>
 
-              <TouchableNativeFeedback>
-                <Image
-                  style={{ width: 24, height: 24 }}
-                  source={require('../../assets/tiktok.png')}
-                />
-              </TouchableNativeFeedback>
+            <View style={{ alignItems: 'center', marginTop: 25 }}>
+              <Text
+                style={{
+                  fontFamily: fonts.primary[500],
+                  color: colors.primary,
+                  textAlign: 'center',
+                  fontSize: 12,
+                }}
+              >
+                © <Text style={{ fontFamily: fonts.primary[800] }}> 2024</Text>{' '}
+                GENORY. All Right Reserved
+              </Text>
             </View>
           </View>
-
-          <View style={{ alignItems: 'center', marginTop: 25 }}>
-            <Text
-              style={{
-                fontFamily: fonts.primary[500],
-                color: colors.primary,
-                textAlign: 'center',
-                fontSize: 12,
-              }}
-            >
-              © <Text style={{ fontFamily: fonts.primary[800] }}> 2024</Text>{' '}
-              GENORY. All Right Reserved
-            </Text>
-          </View>
-        </View>
+        </ScrollView>
       </ImageBackground>
-    </View>
+    </View >
   );
 }

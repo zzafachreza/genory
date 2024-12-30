@@ -37,9 +37,15 @@ export default function Splash({ navigation }) {
       })
     ]).start();
 
-  
+
     setTimeout(() => {
-      navigation.replace("PertamaNextSlide")
+      getData('user').then(res => {
+        if (!res) {
+          navigation.replace("PertamaNextSlide")
+        } else {
+          navigation.replace("MainApp")
+        }
+      })
     }, 1200);
   }, []);
 
@@ -67,14 +73,14 @@ export default function Splash({ navigation }) {
           style={{
             transform: [{ scale: img }],
             width: windowWidth / 1.2,
-            height: windowWidth / 1.2,  
-            marginTop:'28%'
+            height: windowWidth / 1.2,
+            marginTop: '28%'
 
           }}
         />
 
 
-        <ActivityIndicator style={{marginTop:50}} color={colors.primary} size="small" />
+        <ActivityIndicator style={{ marginTop: 50 }} color={colors.primary} size="small" />
 
       </ImageBackground>
 

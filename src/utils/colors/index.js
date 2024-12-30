@@ -1,6 +1,6 @@
 export const colors = {
   primary: '#707A33',
-  secondary: '#E3ECB0',
+  secondary: '#B478B3',
   tertiary: '#F5F5F5',
   foourty: '#FFF1A8',
   background: '#E7EBF2',
@@ -23,7 +23,7 @@ export const colors = {
   tekscolor: '#793C5A',
   card: '#FFFAC3',
   coklat: '#895C16',
-  lossColor:'#B478B3'
+  lossColor: '#B478B3'
 };
 
 export const Color = {

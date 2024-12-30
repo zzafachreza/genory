@@ -14,6 +14,7 @@ export default function MyInput({
   editable,
   icon = true,
   maxLength,
+  textAlign,
   iconname,
   onChangeText,
   value,
@@ -33,15 +34,15 @@ export default function MyInput({
 
   const [tutup, setTutup] = useState(true);
   return (
-    <View style={{ }}>
+    <View style={{}}>
       <Text style={{
-        fontFamily:fonts.primary[600],
+        fontFamily: fonts.primary[600],
         color: colors.black,
         marginBottom: 8,
-        fontSize:15,
-        marginLeft:5,
-        marginTop:10
-        
+        fontSize: 15,
+        marginLeft: 5,
+        marginTop: 10
+
       }}>{label}</Text>
       <View style={{
         height: 50,
@@ -51,7 +52,7 @@ export default function MyInput({
         borderRadius: 10,
         borderColor: borderColor,
         backgroundColor: backgroundColor,
-        
+
       }}>
         {icon && (
           <View style={{
@@ -75,6 +76,7 @@ export default function MyInput({
           autoCapitalize="none"
           style={{
             ...fonts.body3,
+            textAlign: textAlign,
             flex: 1, // Flex untuk mengisi ruang yang ada
             paddingLeft: icon ? 10 : 40,
             paddingRight: rightLabel ? 10 : 0, // Spasi tambahan jika ada rightLabel

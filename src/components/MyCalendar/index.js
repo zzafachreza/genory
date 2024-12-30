@@ -11,11 +11,13 @@ import 'moment/locale/id'
 export default function MyCalendar({
   label,
   valueShow,
+  maxDate,
   iconname,
   onDateChange,
   value,
   keyboardType,
   secureTextEntry,
+  borderColor = colors.primary,
   styleInput,
   placeholder,
   label2,
@@ -29,16 +31,16 @@ export default function MyCalendar({
 
     <View
       style={{
-        
+
       }}>
 
       <Text
         style={{
-          fontFamily:fonts.primary[600],
+          fontFamily: fonts.primary[600],
           color: colors.black,
           marginBottom: 8,
-          fontSize:15,
-          marginTop:10
+          fontSize: 15,
+          marginTop: 10
         }}>
         {label}
       </Text>
@@ -48,7 +50,7 @@ export default function MyCalendar({
         backgroundColor: '#f7f7f7',
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: colors.primary
+        borderColor: borderColor
       }}>
 
         <View style={{
@@ -56,7 +58,7 @@ export default function MyCalendar({
           left: 12,
           top: 13,
         }}>
-          <Icon type='ionicon' name='calendar' color={colors.primary} size={24} />
+          <Icon type='ionicon' name='calendar' color={borderColor} size={24} />
         </View>
         <Text style={{
           position: 'absolute',
@@ -66,7 +68,7 @@ export default function MyCalendar({
           left: 44,
         }}>{moment(value).format('DD MMMM YYYY')}</Text>
         <DatePicker
-
+          maxDate={maxDate}
           style={{ width: '100%', height: 50, }}
           date={value}
           mode="date"

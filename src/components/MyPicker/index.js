@@ -9,6 +9,7 @@ export default function MySecondPicker({
   iconname,
   onChange,
   value,
+  borderColor = colors.primary,
   backgroundColor,
   data = [],
 }) {
@@ -23,12 +24,12 @@ export default function MySecondPicker({
     <>
       <Text
         style={{
-          fontFamily:fonts.primary[600],
+          fontFamily: fonts.primary[600],
           color: colors.black,
           marginBottom: 8,
-          fontSize:15,
-          marginLeft:5,
-          marginTop:10
+          fontSize: 15,
+          marginLeft: 5,
+          marginTop: 10
         }}>
         {label}
       </Text>
@@ -39,8 +40,8 @@ export default function MySecondPicker({
           backgroundColor: backgroundColor,
           borderWidth: 1,
           borderRadius: 10,
-          borderColor: colors.primary,
-          
+          borderColor: borderColor,
+
         }}>
         {/* Icon kiri */}
         <View
@@ -65,7 +66,7 @@ export default function MySecondPicker({
           <Text
             style={{
               fontSize: 15,
-              fontFamily:fonts.primary[600],
+              fontFamily: fonts.primary[600],
               color: colors.black,
             }}>
             {value ? value : label}
@@ -97,7 +98,7 @@ export default function MySecondPicker({
               data={data}
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item }) => (
-           
+
                 <TouchableOpacity
                   style={styles.option}
                   onPress={() => handleSelect(item.value)} // Set value yang dipilih
@@ -126,8 +127,8 @@ const styles = StyleSheet.create({
     width: 300,
     maxHeight: 150,
     elevation: 5,
-    borderWidth:1,
-    borderColor:colors.primary
+    borderWidth: 1,
+    borderColor: colors.primary
   },
   option: {
     paddingVertical: 12,

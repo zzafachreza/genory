@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Color, colors } from '../../utils/colors';
 import { fonts } from '../../utils';
+import { getData } from '../../utils/localStorage';
 
 export default function BottomNavigator({ state, descriptors, navigation }) {
   const windowWidth = Dimensions.get('window').width;
@@ -30,11 +31,15 @@ export default function BottomNavigator({ state, descriptors, navigation }) {
         return { source: null, width: 20, height: 20 };
     }
   };
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    getData('user').then(u => setUser(u));
+  }, [])
 
   return (
     <View
       style={{
-        backgroundColor: colors.primary,
+        backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
         flexDirection: 'row',
         borderTopWidth: 1,
         borderTopColor: Color.blueGray[100],
@@ -48,8 +53,8 @@ export default function BottomNavigator({ state, descriptors, navigation }) {
           options.tabBarLabel !== undefined
             ? options.tabBarLabel
             : options.title !== undefined
-            ? options.title
-            : route.name;
+              ? options.title
+              : route.name;
 
         const isFocused = state.index === index;
 

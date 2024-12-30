@@ -8,9 +8,11 @@ import {
     Linking,
     Alert,
     ActivityIndicator,
+    FlatList,
+    TouchableWithoutFeedback,
 } from 'react-native';
 import { windowWidth, fonts, MyDimensi } from '../../utils/fonts';
-import { getData, MYAPP, storeData, urlAPI, urlApp, urlAvatar } from '../../utils/localStorage';
+import { apiURL, getData, MYAPP, storeData, urlAPI, urlApp, urlAvatar } from '../../utils/localStorage';
 import { Color, colors } from '../../utils/colors';
 import { MyButton, MyGap, MyHeader } from '../../components';
 import { Icon } from 'react-native-elements';
@@ -20,6 +22,15 @@ import axios from 'axios';
 import LinearGradient from 'react-native-linear-gradient';
 import moment from 'moment';
 import { ScrollView } from 'react-native';
+import {
+    LineChart,
+    BarChart,
+    PieChart,
+    ProgressChart,
+    ContributionGraph,
+    StackedBarChart
+} from "react-native-chart-kit";
+
 
 export default function ({ navigation, route }) {
     const [user, setUser] = useState({});
@@ -27,6 +38,116 @@ export default function ({ navigation, route }) {
     const isFocused = useIsFocused();
     const [wa, setWA] = useState('');
     const [open, setOpen] = useState(false);
+    const [grafik, setGrafik] = useState({
+        label: [0],
+        value: [0]
+    });
+
+    const [mulai, setMulai] = useState('');
+    const [plan, setPlan] = useState([]);
+
+    const __getMulai = () => {
+        getData('mulai').then(ml => {
+            if (ml) {
+                setMulai(ml);
+                let ARR = [];
+                for (let index = 1; index <= 14; index++) {
+                    ARR.push({
+                        minggu: index <= 7 ? 'Pertama' : 'Kedua',
+                        hari: index,
+                        tanggal: moment(ml).add(index - 1, 'day').format('YYYY-MM-DD'),
+                    })
+                }
+                setPlan(ARR);
+            }
+
+        })
+    }
+    const __getIMT = () => {
+        getData('user').then(u => {
+            axios.post(apiURL + 'imt_saya', {
+                fid_pengguna: u.id_pengguna,
+            }).then(res => {
+                let lb = [];
+                let vl = [];
+                console.log(res.data);
+                res.data.map((i, index) => {
+                    lb.push(index + 1);
+                    vl.push(parseFloat(i.imt));
+                });
+
+                setGrafik({
+                    label: lb,
+                    value: vl
+                })
+            })
+        })
+    }
+
+    const [sudahnonton, setSudahNonton] = useState(0);
+
+    const __getUser = () => {
+        getData('user').then(u => {
+
+            axios.post(apiURL + 'get_nonton', {
+                fid_pengguna: u.id_pengguna
+            }).then(res => {
+                setSudahNonton(res.data);
+            })
+
+            axios.post(apiURL + 'get_profile', {
+                id: u.id_pengguna
+            }).then(res => {
+
+                setOpen(true);
+                setUser(res.data);
+                storeData('user', res.data);
+            })
+        });
+    }
+
+    const MyIMT = () => {
+
+        let DATA = [];
+        for (let index = 5; index <= 39; index++) {
+            console.log(index);
+            DATA.push(index);
+        }
+
+
+        return <View style={{
+            // height: 15,
+            justifyContent: 'center',
+            alignItems: 'center',
+        }}>
+            <FlatList horizontal data={DATA} renderItem={({ item, index }) => {
+                return <View style={{
+                    // backgroundColor: 'red',
+                    width: windowWidth / 40,
+                }}>
+                    <View style={{
+                        height: 10,
+                    }}>
+                        {item == parseFloat(user.imt).toFixed(0) ? <Icon color={user.tipe == 'Gain' ? colors.primary : colors.secondary} type='ionicon' name='caret-down' size={10} /> : <Text></Text>}
+                    </View>
+                    <View style={{
+                        height: 15,
+                        backgroundColor: item > 4 && item <= 10 ? '#B478B3' : item > 10 && item <= 25 ? '#427CC0' : item > 25 && item <= 35 ? '#F26523' : '#707A33',
+                    }}></View>
+                    <Text style={{
+                        fontFamily: fonts.primary[600],
+                        marginTop: 2,
+                        width: '100%',
+                        flex: 1,
+                        fontSize: 7,
+                    }}>{item == 8 ? `10` : item == 18 ? `20` : item == 30 ? `30` : item == 37 ? `35` : ''}</Text>
+                </View>
+            }} />
+        </View>
+
+
+    }
+
 
 
 
@@ -34,12 +155,9 @@ export default function ({ navigation, route }) {
 
 
         if (isFocused) {
-            getData('user').then(res => {
-                
-                setOpen(true);
-                setUser(res);
-
-            });
+            __getUser();
+            __getMulai();
+            __getIMT();
         }
 
 
@@ -69,31 +187,58 @@ export default function ({ navigation, route }) {
         ])
     };
 
-    const MyList = ({ label, value }) => {
+    const MyList = ({ label, value, back, onPress }) => {
         return (
-            <View
-                style={{
-                    marginVertical: 2,
-                    padding: 5,
-                    paddingHorizontal: 10,
-                    backgroundColor: Color.blueGray[50],
-                    borderRadius: 5,
-                }}>
-                <Text
+            <TouchableWithoutFeedback onPress={onPress}>
+                <View
                     style={{
-                        ...fonts.headline5,
-                        color: Color.primary[900],
+                        marginVertical: Math.round(windowWidth / 22) / 3,
+                        width: Math.round(windowWidth / 2.2),
+                        height: 65,
+
+                        // padding: 5,
+                        paddingHorizontal: 10,
+                        backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                        borderRadius: 5,
                     }}>
-                    {label}
-                </Text>
-                <Text
-                    style={{
-                        ...fonts.body3,
-                        color: Color.blueGray[900],
+                    <Text
+                        style={{
+                            ...fonts.headline5,
+                            color: colors.white,
+                            textAlign: 'center',
+                        }}>
+                        {label}
+                    </Text>
+                    <View style={{
+                        flex: 1,
+                        paddingBottom: 5,
+                        // backgroundColor: 'red',
+                        flexDirection: 'row',
+                        alignItems: 'flex-end',
+                        justifyContent: 'center',
+
                     }}>
-                    {value}
-                </Text>
-            </View>
+                        <Text
+                            style={{
+                                ...fonts.headline5,
+                                fontSize: 25,
+                                color: colors.white,
+                                textAlign: 'center',
+                            }}>
+                            {value}
+                        </Text>
+                        <Text
+                            style={{
+                                left: 5,
+                                ...fonts.headline5,
+                                color: colors.white,
+                                textAlign: 'center',
+                            }}>
+                            {back}
+                        </Text>
+                    </View>
+                </View>
+            </TouchableWithoutFeedback>
         )
     }
     return (
@@ -121,8 +266,8 @@ export default function ({ navigation, route }) {
                         <View style={{
                             justifyContent: 'flex-start',
                             alignItems: 'center',
-                            flexDirection:"row",
-                            padding:10
+                            flexDirection: "row",
+                            padding: 10
 
                         }}>
                             <View style={{
@@ -136,216 +281,204 @@ export default function ({ navigation, route }) {
                                 alignItems: 'center'
                             }}>
 
-                                <Image source={require('../../assets/profile.jpg')} style={{
+                                <Image source={{
+                                    uri: user.file_pengguna
+                                }} style={{
                                     width: 55,
                                     height: 55,
-                                    borderRadius:100
+                                    borderRadius: 100
 
                                 }} />
 
                             </View>
 
                             <View style={{
-                                marginLeft:20
+                                marginLeft: 20
                             }}>
                                 <Text style={{
-                                    fontFamily:fonts.primary[600],
-                                    fontSize:15,
-                                    color:colors.primary,
+                                    fontFamily: fonts.primary[600],
+                                    fontSize: 15,
+                                    color: colors.primary,
 
-                                }}>Halo Kak Jone Done</Text>
+                                }}>Halo Kak {user.nama}</Text>
 
-                                 <Text style={{
-                                    fontFamily:fonts.primary[400],
-                                    fontSize:13,
-                                    color:Color.blueGray[400],
+                                <Text style={{
+                                    fontFamily: fonts.primary[400],
+                                    fontSize: 13,
+                                    color: Color.blueGray[400],
 
-                                }}>Testing Weight Gain Program</Text>
+                                }}>Testing Weight {user.tipe} Program</Text>
                             </View>
                         </View>
-                        <View style={{ padding: 10, }}>
-                           
-                        </View>
+
                         {/* data detail */}
                     </View>
 
                 }
 
                 <View style={{
-                    padding:10,
+                    padding: 10,
                 }}>
 
-                <View style={{
-                    flexDirection:'row',
-                    justifyContent:"space-between",
-                    flexWrap:'wrap',
-                    alignItems:"center"
-                }}>
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: "space-between",
+                        flexWrap: 'wrap',
+                        alignItems: "center"
+                    }}>
 
-                {/* PROGRES */}
-
-                <View style={{
-                    padding:10,
-                    width:160,
-                    backgroundColor:colors.primary,
-                    borderRadius:10,
-                    marginTop:10
-                }}>
-                <Text style={{
-                    fontFamily:fonts.primary[700],
-                    color:colors.white,
-                    fontSize:15,
-                    textAlign:"center"
-                }}>Progres Saya</Text>
-                <Text>{``}</Text>
-                </View>
-
-                {/* USIA */}
-                <View style={{
-                    padding:10,
-                    width:160,
-                    backgroundColor:colors.primary,
-                    borderRadius:10
-                }}>
-                <Text style={{
-                    fontFamily:fonts.primary[700],
-                    color:colors.white,
-                    fontSize:15,
-                    textAlign:"center"
-                }}>Usia</Text>
-                <Text>{``}</Text>
-                </View>
+                        <MyList onPress={() => navigation.navigate('VideoData', user)} label="Progres Saya" value={sudahnonton} back='video' />
+                        <MyList label="Usia" value={moment().diff(user.tanggal_lahir, 'year')} back='th' />
+                        <MyList label="Berat Badan" value={user.berat} back='kg' />
+                        <MyList label="Tinggi Badan" value={user.tinggi} back='cm' />
+                        <MyList label="Jenis Kelamin" value={user.jenis_kelamin} />
+                        <MyList label="Target Kamu" value={user.berat_target} back='kg' />
 
 
-                {/* Berat Badan */}
-                <View style={{
-                    padding:10,
-                    width:160,
-                    backgroundColor:colors.primary,
-                    borderRadius:10,
-                    marginTop:10
-                }}>
-                <Text style={{
-                    fontFamily:fonts.primary[700],
-                    color:colors.white,
-                    fontSize:15,
-                    textAlign:"center"
-                }}>Berat Badan</Text>
-                <Text>{``}</Text>
-                </View>
-                
-                {/* TINGGI BADAN */}
-                <View style={{
-                    padding:10,
-                    width:160,
-                    backgroundColor:colors.primary,
-                    borderRadius:10
-                }}>
-                <Text style={{
-                    fontFamily:fonts.primary[700],
-                    color:colors.white,
-                    fontSize:15,
-                    textAlign:"center"
-                }}>Tinggi Badan</Text>
-                <Text>{``}</Text>
-                </View>
+                    </View>
 
-                {/* JENIS KELAIN */}
-                <View style={{
-                    padding:10,
-                    width:160,
-                    backgroundColor:colors.primary,
-                    borderRadius:10,
-                    marginTop:10
-                }}>
-                <Text style={{
-                    fontFamily:fonts.primary[700],
-                    color:colors.white,
-                    fontSize:15,
-                    textAlign:"center"
-                }}>Jenis Kelamin</Text>
-                <Text>{``}</Text>
-                </View>
+                    {/* Indesk masa tubuh */}
+
+                    <View style={{
+                        padding: 10,
+                        borderWidth: 1,
+                        borderColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                        borderRadius: 10,
+                        marginTop: 20
+                    }}>
+
+                        <View style={{
+                            flexDirection: 'row'
+                        }}>
+                            <Text style={{
+                                flex: 1,
+                                fontFamily: fonts.primary[600],
+                                fontSize: 15,
+                                color: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                            }}>Indeks Masa Tubuh</Text>
+                            <Text style={{
+                                fontFamily: fonts.primary[700],
+                                fontSize: 25,
+                                color: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                            }}>{user.imt}</Text>
 
 
-                {/*  TARGRT */}
-                <View style={{
-                    padding:10,
-                    width:160,
-                    backgroundColor:colors.primary,
-                    borderRadius:10,
-                    marginTop:10
-                }}>
-                <Text style={{
-                    fontFamily:fonts.primary[700],
-                    color:colors.white,
-                    fontSize:15,
-                    textAlign:"center"
-                }}>Target Kamu</Text>
-                <Text>{``}</Text>
-                </View>
-
-                </View>
-
-                {/* Indesk masa tubuh */}
-
-                <View style={{
-                    padding:10,
-                    borderWidth:1,
-                    borderColor:colors.primary,
-                    borderRadius:10,
-                    marginTop:20
-                }}>
-
-                <Text style={{
-                    fontFamily:fonts.primary[600],
-                    fontSize:15,
-                    color:colors.primary,
-                }}>Indeks Masa Tubuh</Text>
-
-                </View>
+                        </View>
+                        <MyIMT />
+                    </View>
 
 
-                {/* Perjalanan kamu */}
-                <View style={{
-                    padding:10,
-                    borderWidth:1,
-                    borderColor:colors.primary,
-                    borderRadius:10,
-                    marginTop:20
-                }}>
+                    {/* Perjalanan kamu */}
+                    <View style={{
+                        padding: 10,
+                        borderWidth: 1,
+                        borderColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                        borderRadius: 10,
+                        marginTop: 20
+                    }}>
 
-                <Text style={{
-                    fontFamily:fonts.primary[600],
-                    fontSize:15,
-                    color:colors.primary,
-                }}>Perjalanan Kamu</Text>
+                        <Text style={{
+                            fontFamily: fonts.primary[600],
+                            fontSize: 15,
+                            color: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                        }}>Perjalanan Kamu</Text>
 
-                </View>
+                        <LineChart
+                            data={{
+                                labels: grafik.label,
+                                datasets: [
+                                    {
+                                        data: grafik.value
+                                    }
+                                ]
+                            }}
+                            width={windowWidth / 1.15} // from react-native
+                            height={220}
+                            yAxisLabel=""
+                            yAxisSuffix=""
+                            yAxisInterval={1} // optional, defaults to 1
+                            chartConfig={{
 
-                {/*  HASIL RENCANA KAMU */}
-                <View style={{
-                    padding:10,
-                    borderWidth:1,
-                    borderColor:colors.primary,
-                    borderRadius:10,
-                    marginTop:20
-                }}>
+                                backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                                backgroundGradientFrom: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                                backgroundGradientTo: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                                decimalPlaces: 2, // optional, defaults to 2dp
+                                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                style: {
+                                    borderRadius: 16,
+                                    fontSize: 9,
+                                },
+                                propsForDots: {
+                                    r: "5",
+                                    strokeWidth: "2",
+                                    stroke: "#ffa726",
+                                    strokeDasharray: [0, 2]
+                                }
+                            }}
+                            bezier
+                            style={{
+                                marginVertical: 8,
+                                borderRadius: 16
+                            }}
+                        />
 
-                <Text style={{
-                    fontFamily:fonts.primary[600],
-                    fontSize:15,
-                    color:colors.primary,
-                }}>Hasil Rencana Kamu</Text>
+                    </View>
 
-                </View>
+                    {/*  HASIL RENCANA KAMU */}
+                    <View style={{
+                        padding: 10,
+                        borderWidth: 1,
+                        borderColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                        borderRadius: 10,
+                        marginTop: 20
+                    }}>
+
+                        <Text style={{
+                            fontFamily: fonts.primary[600],
+                            fontSize: 15,
+                            color: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                        }}>Hasil Rencana Kamu</Text>
+
+                        <FlatList horizontal showsHorizontalScrollIndicator={false} data={plan} renderItem={({ item, index }) => {
+
+                            let MYBACK = user.tipe == 'Gain' ? colors.primary : colors.secondary;
+                            return (
+                                <View style={{
+                                    marginRight: 4,
+
+                                }}>
+                                    <View style={{
+                                        borderRadius: 30,
+                                        width: 60,
+                                        height: 60,
+                                        borderWidth: 1,
+                                        borderColor: Color.blueGray[400],
+                                        backgroundColor: moment(item.tanggal).format('YYYY-MM-DD') <= moment().format('YYYY-MM-DD') ? MYBACK : colors.border,
+
+                                    }}>
+
+                                    </View>
+                                    <Text style={{
+                                        marginTop: 10,
+                                        fontFamily: fonts.primary[400],
+                                        fontSize: 10,
+                                        textAlign: 'center',
+                                    }}>{moment(item.tanggal).format('DD/MM')}</Text>
+
+
+                                </View>
+                            )
+                        }} />
+
+                    </View>
 
 
                 </View>
                 <View style={{
                     padding: 20,
                 }}>
-                    <MyButton warna={colors.primary} title="Edit Profile" Icons="create-outline" onPress={() => navigation.navigate('AccountEdit', user)} />
+                    <MyButton iconColor={colors.white} warna={user.tipe == 'Gain' ? colors.primary : colors.secondary} title="Edit Profile" Icons="create-outline" onPress={() => navigation.navigate('AccountEdit', user)} />
                     <MyGap jarak={10} />
                     <MyButton onPress={btnKeluar} warna={Color.blueGray[300]} title="Log Out" Icons="log-out-outline" iconColor={colors.white} colorText={colors.white} />
                 </View>

@@ -25,7 +25,7 @@ import MyLoading from '../../components/MyLoading';
 
 export default function AccountEdit({ navigation, route }) {
 
-
+    const TIPE = route.params.tipe;
     const [kirim, setKirim] = useState(route.params);
     const [loading, setLoading] = useState(false);
     const sendServer = () => {
@@ -85,11 +85,10 @@ export default function AccountEdit({ navigation, route }) {
                             maxWidth: 200,
                             maxHeight: 200
                         }, response => {
-                            // console.log('All Response = ', response);
 
                             setKirim({
                                 ...kirim,
-                                newfoto_user: `data:${response.type};base64, ${response.base64}`,
+                                newfoto_user: `data:${response.assets[0].type};base64, ${response.assets[0].base64}`,
                             });
                         });
 
@@ -109,40 +108,92 @@ export default function AccountEdit({ navigation, route }) {
                             width: 100,
                             height: 100,
                         }} source={{
-                            uri: kirim.newfoto_user !== null ? kirim.newfoto_user : kirim.foto_user,
+                            uri: kirim.newfoto_user !== null ? kirim.newfoto_user : kirim.file_pengguna,
                         }} />
                     </TouchableOpacity>
                 </View>
 
 
+                <MyInput borderColor={TIPE == 'Gain' ? colors.primary : colors.lossColor} value={kirim.nama}
+                    placeholder="Isi Nama"
+                    backgroundColor='#F7F7F7'
+                    label="Nama"
+                    onChangeText={(x) => setKirim({ ...kirim, 'nama': x })}
+                />
 
-                <MyInput label="Username" iconname="at-outline" value={kirim.username} onChangeText={x => setKirim({ ...kirim, username: x })} />
-                <MyGap jarak={20} />
-                <MyInput label="Nama Lengkap" iconname="person-outline" value={kirim.nama_lengkap} onChangeText={x => setKirim({ ...kirim, nama_lengkap: x })} />
-                <MyGap jarak={20} />
-                <MyInput label="Nomor Telepon" iconname="call-outline" keyboardType='phone-pad' value={kirim.telepon} onChangeText={x => setKirim({ ...kirim, telepon: x })} />
-                <MyGap jarak={20} />
-                <MyPicker value={kirim.jenis_kelamin} label="Jenis Kelamin" iconname="male-female-outline" data={[
-                    { label: 'Laki-laki', value: 'Laki-laki' },
-                    { label: 'Perempuan', value: 'Perempuan' },
-                ]}
-                    onValueChange={x => {
-                        setKirim({
-                            ...kirim,
-                            jenis_kelamin: x
-                        })
-                    }} />
-                <MyGap jarak={20} />
+                <MyPicker
+                    borderColor={TIPE == 'Gain' ? colors.primary : colors.lossColor}
+                    onChange={x => setKirim({
+                        ...kirim,
+                        jenis_kelamin: x
+                    })}
+                    value={kirim.jenis_kelamin}
+                    label="Pilih Jenis Kelamin"
+                    backgroundColor='#F7F7F7'
+                    data={[
+                        { label: 'Laki-laki', value: 'laki-laki' },
+                        { label: 'Perempuan', value: 'perempuan' },
+                    ]}
+                />
 
-                <MyCalendar label={'Tanggal Lahir ( ' + moment().diff(kirim.tanggal_lahir, 'years') + ' Tahun )'} onDateChange={x => {
-                    setKirim({
+                <MyInput
+                    borderColor={TIPE == 'Gain' ? colors.primary : colors.lossColor}
+                    placeholder="Isi Email"
+                    backgroundColor='#F7F7F7'
+                    label="Email"
+                    value={kirim.email}
+                    onChangeText={(x) => setKirim({ ...kirim, 'email': x })}
+                />
+
+                <MyInput
+                    borderColor={TIPE == 'Gain' ? colors.primary : colors.lossColor}
+                    placeholder="Isi Nomor Telepon (Contoh 081xxx) "
+                    backgroundColor='#F7F7F7'
+                    keyboardType="phone-pad"
+                    label="Nomor Telepon (Contoh 081xxx)"
+                    value={kirim.telepon}
+                    onChangeText={(x) => setKirim({ ...kirim, 'telepon': x })}
+                />
+
+
+
+                <MyCalendar
+                    borderColor={TIPE == 'Gain' ? colors.primary : colors.lossColor}
+                    onDateChange={x => setKirim({
                         ...kirim,
                         tanggal_lahir: x
-                    })
-                }} value={kirim.tanggal_lahir} />
+                    })}
+                    value={kirim.tanggal_lahir}
+                    label="Pilih Tanggal Lahir"
+                    backgroundColor='#F7F7F7'
+                    data={[
+                        { label: 'Laki-laki', value: 'laki-laki' },
+                        { label: 'Perempuan', value: 'perempuan' },
+                    ]}
+                />
 
-                <MyGap jarak={20} />
-                <MyInput label="Password" iconname="lock-closed-outline" secureTextEntry={true} onChangeText={x => setKirim({ ...kirim, newpassword: x })} placeholder="Kosongkan jika tidak diubah" />
+
+                <MyInput
+                    borderColor={TIPE == 'Gain' ? colors.primary : colors.lossColor}
+                    keyboardType="number-pad"
+                    placeholder="Isi Tinggi Badan (cm)"
+                    backgroundColor='#F7F7F7'
+                    label="Tinggi Badan (cm)"
+                    value={kirim.tinggi_badan}
+                    onChangeText={(x) => setKirim({ ...kirim, 'tinggi_badan': x })}
+                />
+
+                <MyInput
+                    borderColor={TIPE == 'Gain' ? colors.primary : colors.lossColor}
+                    placeholder="Isi Berat Badan (kg)"
+                    keyboardType="number-pad"
+                    backgroundColor='#F7F7F7'
+                    label="Berat Badan (kg)"
+                    value={kirim.berat_badan}
+                    onChangeText={(x) => setKirim({ ...kirim, 'berat_badan': x })}
+                />
+
+                <MyInput backgroundColor='#F7F7F7' borderColor={TIPE == 'Gain' ? colors.primary : colors.lossColor} label="Password" secureTextEntry={true} onChangeText={x => setKirim({ ...kirim, newpassword: x })} placeholder="Kosongkan jika tidak diubah" />
                 <MyGap jarak={20} />
                 {loading && <MyLoading />}
 
