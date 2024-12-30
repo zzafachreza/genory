@@ -177,7 +177,8 @@ export default function ({ navigation, route }) {
                 text: 'Keluar',
                 onPress: () => {
                     storeData('user', null);
-
+                    storeData('mulai', null);
+                    storeData('alarm', null)
                     navigation.reset({
                         index: 0,
                         routes: [{ name: 'Splash' }],
@@ -214,14 +215,14 @@ export default function ({ navigation, route }) {
                         paddingBottom: 5,
                         // backgroundColor: 'red',
                         flexDirection: 'row',
-                        alignItems: 'flex-end',
+                        // alignItems: 'flex-end',
                         justifyContent: 'center',
 
                     }}>
                         <Text
                             style={{
                                 ...fonts.headline5,
-                                fontSize: 25,
+                                fontSize: 18,
                                 color: colors.white,
                                 textAlign: 'center',
                             }}>

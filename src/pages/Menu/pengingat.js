@@ -7,6 +7,7 @@ import { useToast } from 'react-native-toast-notifications';
 import moment from 'moment';
 import { useIsFocused } from '@react-navigation/native';
 import PushNotification from "react-native-push-notification";
+import { maskJs, maskCurrency } from 'mask-js';
 
 export default function PengingatProgram({ navigation, route }) {
 
@@ -87,9 +88,10 @@ export default function PengingatProgram({ navigation, route }) {
               <View style={{
                 flex: 1,
               }}>
-                <TextInput onChangeText={x => {
+                <TextInput maxLength={5} onChangeText={x => {
+
                   let tmp = [...data];
-                  tmp[index].jam = x;
+                  tmp[index].jam = maskJs('99:99', x);
                   setData(tmp);
                   storeData('alarm', tmp)
                 }} keyboardType='number-pad' style={{

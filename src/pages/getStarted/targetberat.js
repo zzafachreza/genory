@@ -173,8 +173,9 @@ export default function TargetBerat({ navigation, }) {
                                 toast.show(res.data.message, {
                                     type: 'success'
                                 });
-                                navigation.navigate('RingkasanRencana')
+
                             }
+                            navigation.navigate('RingkasanRencana')
                         })
                     }}>
                         <View style={{

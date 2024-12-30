@@ -394,7 +394,7 @@ export default function ProgramPertama({ navigation, route }) {
                           bottom: 0,
                           fontFamily: fonts.primary[400],
                           color: colors.white
-                        }}>{TANGGAL}</Text>
+                        }}>{mulai.length > 0 ? TANGGAL : ''}</Text>
                       </View>
                     </TouchableWithoutFeedback>
                   );
@@ -549,7 +549,7 @@ export default function ProgramPertama({ navigation, route }) {
                   }}
                 >
                   <TouchableNativeFeedback onPress={() => {
-                    storeData('mulai', moment().format('2024-12-30'))
+
                     storeData('plan', userInput);
                     toast.show('Rencana berhasil disimpan !', {
                       type: 'success'

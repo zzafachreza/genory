@@ -1,10 +1,26 @@
-import { View, Text, PermissionsAndroid, ImageBackground, Image, TouchableNativeFeedback, ScrollView } from 'react-native'
-import React from 'react'
+import { View, Text, PermissionsAndroid, ImageBackground, Image, TouchableNativeFeedback, ScrollView, Linking, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { fonts, colors } from '../../utils'
 import PushNotification from "react-native-push-notification";
 import moment from 'moment';
+import axios from 'axios';
+import { apiURL } from '../../utils/localStorage';
 
 export default function PertamaNextSlide({ navigation }) {
+
+
+    const [medsos, setMedsos] = useState({
+        instagram: '',
+        tiktok: '',
+        whatsapp: '',
+    });
+    const __GetMedsos = () => {
+        axios.post(apiURL + 'medsos').then(res => {
+            console.log(res.data);
+            setMedsos(res.data)
+        })
+    }
+
 
 
     const nextPage = async () => {
@@ -26,6 +42,10 @@ export default function PertamaNextSlide({ navigation }) {
         // console.log('momoent', moment().toISOString())
 
     }
+
+    useEffect(() => {
+        __GetMedsos();
+    }, [])
     return (
         <View style={{
             flex: 1,
@@ -37,11 +57,12 @@ export default function PertamaNextSlide({ navigation }) {
                 height: '100%'
 
             }}>
+                <ScrollView>
+                    <View style={{
+                        flex: 1,
+                        padding: 10,
+                    }}>
 
-                <View style={{
-                    padding: 10,
-                }}>
-                    <ScrollView>
 
                         <View style={{
                             marginTop: 70
@@ -119,79 +140,78 @@ export default function PertamaNextSlide({ navigation }) {
                             </TouchableNativeFeedback>
                         </View>
 
-                    </ScrollView>
 
 
-                    {/* end */}
-                    <View>
-                        <View style={{
-                            alignItems: 'center',
-                            marginTop: 20
-                        }}>
-                            <Image style={{
-                                width: 73,
-                                height: 29,
-                            }} source={require('../../assets/genory.png')} />
-                        </View>
 
-                        <View style={{}}>
-                            <Text style={{
-                                fontFamily: fonts.primary[500],
-                                fontSize: 15,
-                                textAlign: "center",
-                                color: colors.primary,
-                            }}>Make The Look You Want With, Genory!</Text>
-                        </View>
-
-                        <View style={{
-                            alignItems: 'center',
-                            marginTop: 20,
-                        }}>
+                        {/* end */}
+                        <View>
                             <View style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-around',
-                                alignItems: "center",
-                                width: 159
+                                alignItems: 'center',
+                                marginTop: 20
                             }}>
-
-                                <TouchableNativeFeedback>
-                                    <Image style={{
-                                        width: 24,
-                                        height: 24
-                                    }} source={require('../../assets/instagram.png')} />
-                                </TouchableNativeFeedback>
-
-
-                                <TouchableNativeFeedback>
-                                    <Image style={{
-                                        width: 24,
-                                        height: 24
-                                    }} source={require('../../assets/WA.png')} />
-                                </TouchableNativeFeedback>
-
-
-                                <TouchableNativeFeedback>
-                                    <Image style={{
-                                        width: 24,
-                                        height: 24
-                                    }} source={require('../../assets/tiktok.png')} />
-                                </TouchableNativeFeedback>
-
+                                <Image style={{
+                                    width: 73,
+                                    height: 29,
+                                }} source={require('../../assets/genory.png')} />
                             </View>
-                        </View>
+
+                            <View style={{}}>
+                                <Text style={{
+                                    fontFamily: fonts.primary[500],
+                                    fontSize: 15,
+                                    textAlign: "center",
+                                    color: colors.primary,
+                                }}>Make The Look You Want With, Genory!</Text>
+                            </View>
+
+                            <View style={{
+                                alignItems: 'center',
+                                marginTop: 20,
+                            }}>
+                                <View style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-around',
+                                    alignItems: "center",
+                                    width: 159
+                                }}>
+
+                                    <TouchableOpacity onPress={() => Linking.openURL(medsos.instagram)}>
+                                        <Image
+                                            style={{ width: 24, height: 24 }}
+                                            source={require('../../assets/instagram.png')}
+                                        />
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity onPress={() => Linking.openURL(medsos.whatsapp)}>
+                                        <Image
+                                            style={{ width: 24, height: 24 }}
+                                            source={require('../../assets/WA.png')}
+                                        />
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity onPress={() => Linking.openURL(medsos.tiktok)}>
+                                        <Image
+                                            style={{ width: 24, height: 24 }}
+                                            source={require('../../assets/tiktok.png')}
+                                        />
+                                    </TouchableOpacity>
+
+                                </View>
+                            </View>
 
 
-                        <View style={{
-                            alignItems: 'center',
-                            marginTop: 25,
-                        }}>
-                            <Text style={{ fontFamily: fonts.primary[500], color: colors.primary, textAlign: 'center', fontSize: 12 }}>© <Text style={{ fontFamily: fonts.primary[800] }}> 2024</Text> GENORY. All Right Reserved</Text>
+                            <View style={{
+                                alignItems: 'center',
+                                marginTop: 25,
+                            }}>
+                                <Text style={{ fontFamily: fonts.primary[500], color: colors.primary, textAlign: 'center', fontSize: 12 }}>© <Text style={{ fontFamily: fonts.primary[800] }}> 2024</Text> GENORY. All Right Reserved</Text>
+                            </View>
+
                         </View>
 
                     </View>
 
-                </View>
-
+                </ScrollView>
             </ImageBackground>
         </View>
     )

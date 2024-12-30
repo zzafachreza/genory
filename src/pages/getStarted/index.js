@@ -17,7 +17,8 @@ import { colors, fonts } from '../../utils';
 import { apiURL, getData, webURL } from '../../utils/localStorage';
 import axios from 'axios';
 
-export default function GetStarted({ navigation }) {
+export default function GetStarted({ navigation, route }) {
+
   const screenWidth = Dimensions.get('window').width;
   const maxSlide = screenWidth - 100;  // Batas slide panah
   const [data, setData] = useState([
@@ -71,7 +72,7 @@ export default function GetStarted({ navigation }) {
   useEffect(() => {
     getData('user').then(res => {
       setUser(res);
-      // console.log(res)
+      console.log(res)
     })
     __GetSlider();
     __GetMedsos();
@@ -115,11 +116,11 @@ export default function GetStarted({ navigation }) {
   return (
     <View style={{ flex: 1, backgroundColor: colors.primary }}>
       <ImageBackground
-        source={require('../../assets/bgimg.png')}
+        source={user.tipe == 'Gain' ? require('../../assets/bgimg.png') : require('../../assets/bgloss.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
       >
         <ScrollView>
-          <View style={{ padding: 0 }}>
+          <View style={{ padding: 0, backgroundColor: colors.white }}>
 
             <View style={{ alignItems: 'center' }}>
               <Image
@@ -134,12 +135,12 @@ export default function GetStarted({ navigation }) {
               />
             </View>
 
-            <View style={{ alignItems: 'center', marginTop: 12 }}>
+            <View style={{ alignItems: 'center', marginTop: 12, }}>
               <View style={{ width: 310 }}>
                 <Text
                   style={{
                     fontFamily: fonts.primary[700],
-                    color: colors.primary,
+                    color: user.tipe == 'Gain' ? colors.primary : colors.secondary,
                     fontSize: 25,
                     textAlign: 'center',
                   }}
@@ -165,7 +166,7 @@ export default function GetStarted({ navigation }) {
                 <Animated.View
                   style={{
                     padding: 10,
-                    backgroundColor: backgroundColor,
+                    backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
                     width: 310,
                     height: 55,
                     borderRadius: 30,
@@ -181,7 +182,7 @@ export default function GetStarted({ navigation }) {
                       height: 44,
                       marginLeft: arrowPosition,
                     }}
-                    source={require('../../assets/arror_roundfill.png')}
+                    source={user.tipe == 'Gain' ? require('../../assets/arror_roundfill.png') : require('../../assets/btnloss.png')}
                   />
 
                   <Animated.Text
@@ -213,7 +214,7 @@ export default function GetStarted({ navigation }) {
                   fontFamily: fonts.primary[500],
                   fontSize: 15,
                   textAlign: 'center',
-                  color: colors.primary,
+                  color: user.tipe == 'Gain' ? colors.primary : colors.secondary
                 }}
               >
                 Make The Look You Want With, Genory!
@@ -256,7 +257,7 @@ export default function GetStarted({ navigation }) {
               <Text
                 style={{
                   fontFamily: fonts.primary[500],
-                  color: colors.primary,
+                  color: user.tipe == 'Gain' ? colors.primary : colors.secondary,
                   textAlign: 'center',
                   fontSize: 12,
                 }}
