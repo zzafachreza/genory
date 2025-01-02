@@ -69,6 +69,14 @@ export default function Router() {
         }}
       />
 
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{
+          headerShown: false,
+        }}
+      />
+
 
 
 

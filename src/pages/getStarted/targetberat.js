@@ -163,10 +163,13 @@ export default function TargetBerat({ navigation, }) {
                         axios.post(apiURL + 'target', {
                             id: user.id_pengguna,
                             nama: user.nama,
+                            berat_badan: user.berat_badan,
+                            tinggi_badan: user.tinggi_badan,
                             imt: user.imt,
                             hasil: user.hasil,
                             telepon: user.telepon,
                             target: TARGET,
+                            tipe: user.tipe
                         }).then(res => {
                             console.log(res.data);
                             if (res.data.status == 200) {

@@ -109,7 +109,7 @@ export default function ({ navigation, route }) {
     const MyIMT = () => {
 
         let DATA = [];
-        for (let index = 5; index <= 39; index++) {
+        for (let index = 0; index <= 35; index++) {
             console.log(index);
             DATA.push(index);
         }
@@ -123,8 +123,9 @@ export default function ({ navigation, route }) {
             <FlatList horizontal data={DATA} renderItem={({ item, index }) => {
                 return <View style={{
                     // backgroundColor: 'red',
-                    width: windowWidth / 40,
+                    width: (windowWidth / 40) - 0.5,
                 }}>
+
                     <View style={{
                         height: 10,
                     }}>
@@ -132,7 +133,7 @@ export default function ({ navigation, route }) {
                     </View>
                     <View style={{
                         height: 15,
-                        backgroundColor: item > 4 && item <= 10 ? '#B478B3' : item > 10 && item <= 25 ? '#427CC0' : item > 25 && item <= 35 ? '#F26523' : '#707A33',
+                        backgroundColor: item >= 0 && item <= 10 ? '#B478B3' : item > 10 && item <= 20 ? '#427CC0' : item > 20 && item <= 30 ? '#F26523' : '#707A33',
                     }}></View>
                     <Text style={{
                         fontFamily: fonts.primary[600],
@@ -140,7 +141,7 @@ export default function ({ navigation, route }) {
                         width: '100%',
                         flex: 1,
                         fontSize: 7,
-                    }}>{item == 8 ? `10` : item == 18 ? `20` : item == 30 ? `30` : item == 37 ? `35` : ''}</Text>
+                    }}>{item == 11 ? `10` : item == 21 ? `20` : item == 31 ? `30` : item == 35 ? `35` : ''}</Text>
                 </View>
             }} />
         </View>
@@ -177,8 +178,8 @@ export default function ({ navigation, route }) {
                 text: 'Keluar',
                 onPress: () => {
                     storeData('user', null);
-                    storeData('mulai', null);
-                    storeData('alarm', null)
+                    // storeData('mulai', null);
+                    // storeData('alarm', null)
                     navigation.reset({
                         index: 0,
                         routes: [{ name: 'Splash' }],
@@ -383,7 +384,7 @@ export default function ({ navigation, route }) {
                             fontSize: 15,
                             color: user.tipe == 'Gain' ? colors.primary : colors.secondary,
                         }}>Perjalanan Kamu</Text>
-
+                        {mulai.length > 0 && <Text style={{ fontSize: 11, fontFamily: fonts.primary[400] }}>{moment(mulai).format('DD MMM YYYY') + ' - ' + moment(mulai).add(13, 'day').format('DD MMM YYYY')}</Text>}
                         <LineChart
                             data={{
                                 labels: grafik.label,
@@ -440,8 +441,8 @@ export default function ({ navigation, route }) {
                             fontSize: 15,
                             color: user.tipe == 'Gain' ? colors.primary : colors.secondary,
                         }}>Hasil Rencana Kamu</Text>
-
-                        <FlatList horizontal showsHorizontalScrollIndicator={false} data={plan} renderItem={({ item, index }) => {
+                        {mulai.length > 0 && <Text style={{ fontSize: 11, fontFamily: fonts.primary[400] }}>{moment(mulai).format('DD MMM YYYY') + ' - ' + moment(mulai).add(13, 'day').format('DD MMM YYYY')}</Text>}
+                        <FlatList horizontal persistentScrollbar={true} showsHorizontalScrollIndicator={true} data={plan} renderItem={({ item, index }) => {
 
                             let MYBACK = user.tipe == 'Gain' ? colors.primary : colors.secondary;
                             return (

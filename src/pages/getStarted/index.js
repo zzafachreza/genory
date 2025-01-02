@@ -13,9 +13,10 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity
 } from 'react-native';
-import { colors, fonts } from '../../utils';
+import { colors, fonts, windowHeight, windowWidth } from '../../utils';
 import { apiURL, getData, webURL } from '../../utils/localStorage';
 import axios from 'axios';
+import Carousel from 'react-native-snap-carousel';
 
 export default function GetStarted({ navigation, route }) {
 
@@ -32,12 +33,13 @@ export default function GetStarted({ navigation, route }) {
     tiktok: '',
     whatsapp: '',
   });
+  const __GetMedsos = () => {
+    axios.post(apiURL + 'medsos').then(res => {
+      console.log(res.data);
+      setMedsos(res.data)
+    })
+  }
 
-  const banner = [
-    { id: 1, image: require('../../assets/banner_getstarted.png') },
-    { id: 2, image: require('../../assets/banner_getstarted2.png') },
-    { id: 3, image: require('../../assets/banner_getstarted3.png') },
-  ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const arrowPosition = useRef(new Animated.Value(0)).current;
@@ -54,20 +56,18 @@ export default function GetStarted({ navigation, route }) {
   });
 
   const __GetSlider = () => {
-    axios.post(apiURL + 'slider', {
-      posisi: 'Opening'
-    }).then(res => {
-      console.log(res.data);
-      setData(res.data)
+    getData('user').then(u => {
+      axios.post(apiURL + 'slider', {
+        posisi: 'Opening',
+        tipe: '',
+      }).then(res => {
+        console.log(res.data);
+        setData(res.data)
+      })
     })
   }
 
-  const __GetMedsos = () => {
-    axios.post(apiURL + 'medsos').then(res => {
-      console.log(res.data);
-      setMedsos(res.data)
-    })
-  }
+
 
   useEffect(() => {
     getData('user').then(res => {
@@ -76,12 +76,31 @@ export default function GetStarted({ navigation, route }) {
     })
     __GetSlider();
     __GetMedsos();
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % banner.length);
-    }, 4500);
 
-    return () => clearInterval(interval);
   }, []);
+
+  const _renderItem = ({ item, index }) => {
+    return (
+
+      <View style={{
+        width: '100%',
+        height: windowHeight / 2,
+        // borderWidth: 1,
+        overflow: 'hidden',
+        // borderRadius: 10,
+      }}>
+        <Image style={{
+          width: windowWidth,
+          height: windowHeight / 2,
+          // borderRadius: 10,
+        }} source={{
+          uri: webURL + item.gambar
+        }} />
+      </View>
+
+    );
+  }
+
 
   const handleMove = Animated.event(
     [
@@ -114,7 +133,7 @@ export default function GetStarted({ navigation, route }) {
   });
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.primary }}>
+    <View style={{ flex: 1, backgroundColor: colors.white }}>
       <ImageBackground
         source={user.tipe == 'Gain' ? require('../../assets/bgimg.png') : require('../../assets/bgloss.png')}
         style={{ flex: 1, width: '100%', height: '100%' }}
@@ -122,18 +141,17 @@ export default function GetStarted({ navigation, route }) {
         <ScrollView>
           <View style={{ padding: 0, backgroundColor: colors.white }}>
 
-            <View style={{ alignItems: 'center' }}>
-              <Image
-                style={{
-                  width: '100%',
-                  height: 456,
-                  resizeMode: 'cover',
-                }}
-                source={{
-                  uri: webURL + data[currentImageIndex].gambar
-                }}
-              />
-            </View>
+            <Carousel
+              loop
+              autoPlayInterval={1000}
+              autoplay
+              layoutCardOffset={0}
+              // ref={(c) => { this._carousel = c; }}
+              data={data}
+              renderItem={_renderItem}
+              sliderWidth={windowWidth}
+              itemWidth={windowHeight / 2}
+            />
 
             <View style={{ alignItems: 'center', marginTop: 12, }}>
               <View style={{ width: 310 }}>

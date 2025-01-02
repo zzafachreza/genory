@@ -4,16 +4,25 @@ import { colors } from '../../utils'
 import { MyHeader } from '../../components'
 import { Image } from 'react-native'
 import Pdf from 'react-native-pdf';
-import { apiURL, webURL } from '../../utils/localStorage'
+import { apiURL, getData, webURL } from '../../utils/localStorage'
 import axios from 'axios'
+import MyLoading from '../../components/MyLoading'
 export default function MealPlan({ navigation }) {
 
   const [data, setData] = useState({
     file_meal: ''
   });
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    axios.post(apiURL + 'meal').then(res => {
-      setData(res.data)
+    getData('user').then(u => {
+      axios.post(apiURL + 'meal', {
+        tipe: u.tipe
+      }).then(res => {
+        setData(res.data);
+        setTimeout(() => {
+          setLoading(false);
+        }, 800)
+      })
     })
   }, [])
 
@@ -31,7 +40,10 @@ export default function MealPlan({ navigation }) {
         backgroundColor: colors.white
       }}>
 
-        <Pdf
+
+        {loading && <MyLoading />}
+
+        {!loading && <Pdf
           trustAllCerts={false}
           // source={{ uri: webURL + data.foto_pdf, cache: true }}
           source={{
@@ -52,7 +64,7 @@ export default function MealPlan({ navigation }) {
           style={{
             flex: 1,
 
-          }} />
+          }} />}
       </View>
 
     </View>

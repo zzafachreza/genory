@@ -11,13 +11,14 @@ import {
   TouchableOpacity,
   SafeAreaView,
   ScrollView,
-  TouchableNativeFeedback
+  TouchableNativeFeedback,
+  Linking
 } from 'react-native';
 import { MyButton, MyCalendar, MyGap, MyHeader, MyInput, MyPicker } from '../../components';
 import { MyDimensi, colors, fonts, windowHeight, windowWidth, Color } from '../../utils';
 import { MYAPP, apiURL, api_token, getData, storeData, webURL } from '../../utils/localStorage';
 import { BackgroundImage } from 'react-native-elements/dist/config';
-import { color } from 'react-native-reanimated';
+import { ceil, color } from 'react-native-reanimated';
 import axios from 'axios';
 import moment, { weekdays } from 'moment';
 import { useToast } from 'react-native-toast-notifications';
@@ -25,7 +26,7 @@ import MyLoading from '../../components/MyLoading';
 import Carousel from 'react-native-snap-carousel';
 import { Icon } from 'react-native-elements';
 import { useIsFocused } from '@react-navigation/native';
-
+import YouTubeIframe from 'react-native-youtube-iframe';
 
 const MyMenu = ({ onPress, img, label, backgroundColor, desc }) => {
   return (
@@ -87,11 +88,14 @@ export default function Home({ navigation, route }) {
     );
   }
   const __GetSlider = () => {
-    axios.post(apiURL + 'slider', {
-      posisi: 'Home'
-    }).then(res => {
-      console.log(res.data);
-      setSlider(res.data)
+    getData('user').then(u => {
+      axios.post(apiURL + 'slider', {
+        posisi: 'Home',
+        tipe: u.tipe
+      }).then(res => {
+        console.log(res.data);
+        setSlider(res.data)
+      })
     })
   }
 
@@ -107,11 +111,24 @@ export default function Home({ navigation, route }) {
     });
   }
 
+  const [youtube, setYotube] = useState('VYvWyywdpfo');
+  const _getYoutube = () => {
+    getData('user').then(u => {
+      axios.post(apiURL + 'yt_link', {
+        tipe: u.tipe
+      }).then(res => {
+        console.log(res.data.youtube);
+        setYotube(res.data.youtube);
+      })
+    });
+  }
+
   const isFocus = useIsFocused();
   useEffect(() => {
     if (isFocus) {
       __getUser();
       __GetSlider();
+      _getYoutube();
     }
   }, [isFocus])
   return (
@@ -216,10 +233,20 @@ export default function Home({ navigation, route }) {
               marginBottom: 10,
             }}>Capai targetmu lebih cepat dan sehat!</Text>
 
+
+
             <View style={{
               paddingHorizontal: 20,
 
             }}>
+              <YouTubeIframe
+                height={200}
+                width={"100%"}
+                videoId={youtube}
+                play={false}
+                onChangeState={event => console.log(event)}
+                onReady={event => console.log("Video is ready")}
+              />
 
               {/* PROGRAM PERTAMA */}
               <TouchableNativeFeedback onPress={() => navigation.navigate('ProgramPertama', { week: 1 })}>

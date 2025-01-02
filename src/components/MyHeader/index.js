@@ -30,9 +30,9 @@ export default function MyHeader({ onPress, color = colors.white, title, icon = 
     }}>
 
       <TouchableOpacity onPress={() => navigation.goBack()} style={{
-        // backgroundColor: 'red',
+        zIndex: 99,
         height: 70,
-        width: 70,
+        width: 80,
         justifyContent: 'center',
         alignItems: 'center',
         // padding: 10,

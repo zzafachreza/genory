@@ -21,7 +21,9 @@ export default function PertamaNextSlide({ navigation }) {
         })
     }
 
-
+    useEffect(() => {
+        __GetMedsos();
+    }, [])
 
     const nextPage = async () => {
 
@@ -43,9 +45,7 @@ export default function PertamaNextSlide({ navigation }) {
 
     }
 
-    useEffect(() => {
-        __GetMedsos();
-    }, [])
+
     return (
         <View style={{
             flex: 1,

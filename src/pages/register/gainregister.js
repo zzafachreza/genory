@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, ImageBackground, TouchableWithoutFeedback } from 'react-native'
 import React, { useState } from 'react'
 import { colors, fonts } from '../../utils'
-import { MyCalendar, MyInput, MyPicker } from '../../components'
+import { MyCalendar, MyGap, MyInput, MyPicker } from '../../components'
 import { showMessage } from 'react-native-flash-message';
 import axios from 'axios';
 import { api_token, apiURL, storeData } from '../../utils/localStorage';
@@ -225,8 +225,8 @@ export default function GainRegister({ navigation, route }) {
                                 label="Pilih Jenis Kelamin"
                                 backgroundColor='#F7F7F7'
                                 data={[
-                                    { label: 'Laki-laki', value: 'laki-laki' },
-                                    { label: 'Perempuan', value: 'perempuan' },
+                                    { label: 'Laki-laki', value: 'Laki-laki' },
+                                    { label: 'Perempuan', value: 'Perempuan' },
                                 ]}
                             />
 
@@ -311,6 +311,25 @@ export default function GainRegister({ navigation, route }) {
                                             color: colors.white
                                         }}>
                                             Lanjutkan Program
+                                        </Text>
+                                    </View>
+                                </TouchableWithoutFeedback>
+                                <MyGap jarak={20} />
+                                <TouchableWithoutFeedback onPress={() => navigation.navigate('Login', {
+                                    tipe: TIPE,
+                                })}>
+                                    <View style={{
+                                        padding: 10,
+                                        backgroundColor: colors.black,
+                                        alignItems: 'center',
+                                        borderRadius: 30,
+                                    }}>
+                                        <Text style={{
+                                            fontFamily: fonts.primary[600],
+                                            textAlign: 'center',
+                                            color: colors.white
+                                        }}>
+                                            Masuk
                                         </Text>
                                     </View>
                                 </TouchableWithoutFeedback>

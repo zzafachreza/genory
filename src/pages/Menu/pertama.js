@@ -1,4 +1,4 @@
-import { View, Text, TouchableNativeFeedback, ScrollView, Image, TextInput, Alert, FlatList, Linking } from 'react-native';
+import { View, Text, TouchableNativeFeedback, ScrollView, Image, TextInput, Alert, FlatList, Linking, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { colors, fonts, windowWidth } from '../../utils';
 import { MyHeader } from '../../components';
@@ -32,19 +32,22 @@ export default function ProgramPertama({ navigation, route }) {
   const [user, setUser] = useState({});
   const toast = useToast();
   const [loading, setLoading] = useState(true);
+  const [EDIT, setEDIT] = useState(false);
+  const [cekMULAI, setCEKMULAI] = useState(false);
 
   const __getVideo = () => {
     getData('user').then(u => {
       setUser(u);
       axios.post(apiURL + 'youtube', {
-        fid_pengguna: u.id_pengguna
+        fid_pengguna: u.id_pengguna,
+        tipe: u.tipe
       }).then(res => {
-
+        console.log('vieo', res.data)
         setTimeout(() => {
           setLoading(false);
           getData('mulai').then(ml => {
             if (ml) {
-
+              setCEKMULAI(true);
               setMulai(ml);
               let ARR = [];
               for (let index = 1; index <= 14; index++) {
@@ -57,13 +60,17 @@ export default function ProgramPertama({ navigation, route }) {
               setCekTanggal(ARR);
 
               let arr = ARR.filter(i => i.tanggal == moment().format('YYYY-MM-DD'))[0];
-
+              setBOLEH_LIHAT(arr.hari);
               let videoPilih = res.data.filter(i => i.hari == arr.hari);
               setFilter(videoPilih);
+
+              // alert(arr.hari)
               setYotube(res.data);
 
             } else {
+              setCEKMULAI(false)
               setYotube(res.data);
+              setBOLEH_LIHAT(1);
             }
           })
         }, 1000);
@@ -74,12 +81,16 @@ export default function ProgramPertama({ navigation, route }) {
 
   const [produk, setProduk] = useState([]);
   const __getProduk = () => {
-    axios.post(apiURL + 'produk').then(res => {
-      // console.log('produk', res.data)
-      setProduk(res.data);
-      setTimeout(() => {
-        setLoading(false)
-      }, 500);
+    getData('user').then(u => {
+      axios.post(apiURL + 'produk', {
+        tipe: u.tipe
+      }).then(res => {
+        console.log('produk', res.data)
+        setProduk(res.data);
+        setTimeout(() => {
+          setLoading(false)
+        }, 500);
+      })
     })
 
   }
@@ -129,7 +140,7 @@ export default function ProgramPertama({ navigation, route }) {
   }
 
   useEffect(() => {
-    __getProduk();
+
 
 
 
@@ -145,7 +156,7 @@ export default function ProgramPertama({ navigation, route }) {
 
     if (isFocus) {
       __getIMT();
-
+      __getProduk();
 
       __getVideo();
 
@@ -156,6 +167,8 @@ export default function ProgramPertama({ navigation, route }) {
   }, [isFocus]);
 
 
+  const [BOLEH_LIHAT, setBOLEH_LIHAT] = useState(0);
+  // const HARI_SEBERAHA =  ;
 
   // Fungsi untuk mengganti konten berdasarkan minggu
   const handleWeekChange = (week) => {
@@ -174,19 +187,34 @@ export default function ProgramPertama({ navigation, route }) {
   ); // Calculate the current day number relative to startDate
 
   const handlePengingatClick = () => {
-    const startDay = currentWeek === 1 ? 1 : 8;
-    const endDay = currentWeek === 1 ? 7 : 14;
-    navigation.navigate('PengingatProgram', { startDay, endDay, currentWeek });
+
+    if (mulai.length > 0) {
+
+
+      const startDay = currentWeek === 1 ? 1 : 8;
+      const endDay = currentWeek === 1 ? 7 : 14;
+      navigation.navigate('PengingatProgram', { week: currentWeek });
+    } else {
+      toast.show('Silahkan tonton video terlebih dahulu agar dapat mengunakan fitur ini !', {
+        type: 'warning'
+      });
+    }
   };
 
 
   const _renderItem = ({ item, index }) => {
     return (
 
-      <TouchableWithoutFeedback onPress={() => navigation.navigate('VideoLatihan', {
-        ...item,
-        index: index + 1,
-      })}>
+      <TouchableWithoutFeedback onPress={() => {
+        console.log(BOLEH_LIHAT);
+
+
+        navigation.navigate('VideoLatihan', {
+          ...item,
+          index: index + 1,
+          lihat: BOLEH_LIHAT
+        })
+      }}>
         <View style={{
           // marginBottom: 10,
           width: 300,
@@ -291,152 +319,172 @@ export default function ProgramPertama({ navigation, route }) {
           </Text>
           {mulai.length > 0 && <Text style={{ fontSize: 11, fontFamily: fonts.primary[400] }}>{moment(mulai).format('DD MMM YYYY') + ' - ' + moment(mulai).add(13, 'day').format('DD MMM YYYY')}</Text>}
           {/* Kalendar Tahapan */}
-          <View style={{}}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "flex-start" }}>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                style={{ marginTop: 10 }}
-              >
-                {currentWeek === 2 && (
-                  <TouchableNativeFeedback onPress={() => setCurrentWeek(1)}>
-                    <View
-                      style={{
-                        height: 61, // Ukuran tombol Minggu ke 1
-                        width: 70, // Lebar tombol diatur secara independen
-                        backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
-                        borderRadius: 10,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        elevation: 5,
-                        shadowColor: '#000',
-                        shadowOffset: { width: 0, height: 2 },
-                        shadowOpacity: 0.25,
-                        shadowRadius: 3.84,
-                        marginRight: 10, // Posisikan tombol ke kanan
-                        zIndex: 10, // Pastikan tombol berada di depan
-                        display: 'flex', // Pastikan tombol dapat ditampilkan
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: fonts.primary[600],
-                          fontSize: 12,
-                          color: colors.white,
-                          textAlign: 'center',
-                        }}
-                      >
-                        Minggu{'\n'}
-                        ke{'\n'}
-                        1
-                      </Text>
-                    </View>
-                  </TouchableNativeFeedback>
-                )}
-                {days.map((day) => {
-                  const dayAbsolute = currentWeek === 1 ? day : day + 7; // Map day to absolute day
-                  const MYBACK = user.tipe == 'Gain' ? colors.primary : colors.secondary;
-                  let TANGGAL = moment(mulai).add(day - 1, 'day').format('DD/MM/YY');
-                  let TANGGAL_DATA = moment(mulai).add(day - 1, 'day').format('YYYY-MM-DD');
-                  return (
-                    <TouchableWithoutFeedback onPress={() => {
-                      if (moment().format('YYYY-MM-DD') >= moment(TANGGAL_DATA).format('YYYY-MM-DD')) {
-                        filterVideo(TANGGAL_DATA);
-                      } else {
-                        toast.show(`Maaf hari ke ${day} belum bisa di akses !`)
-                      }
+          {mulai.length > 0 &&
+
+            <View style={{}}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "flex-start" }}>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  style={{ marginTop: 10 }}
+                >
+                  {currentWeek === 2 && (
+                    <TouchableNativeFeedback onPress={() => {
+
+                      setCurrentWeek(1)
+                      filterVideo(moment(mulai).add(0, 'day').format('YYYY-MM-DD'));
+
 
                     }}>
                       <View
-                        key={day}
                         style={{
-                          padding: 10,
-                          backgroundColor: moment().format('YYYY-MM-DD') >= moment(TANGGAL_DATA).format('YYYY-MM-DD') ? MYBACK : colors.border,
+                          height: 61, // Ukuran tombol Minggu ke 1
+                          width: 70, // Lebar tombol diatur secara independen
+                          backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
                           borderRadius: 10,
-                          marginRight: 10,
                           alignItems: 'center',
-                          width: 42,
-                          marginBottom: 10, // Add space for better visibility
-                          // Shadow properties
-                          elevation: 8, // Android shadow
-                          shadowColor: '#000', // iOS shadow color
-                          shadowOffset: { width: 0, height: 4 }, // iOS shadow offset
-                          shadowOpacity: 0.3, // iOS shadow opacity
-                          shadowRadius: 4.65, // iOS shadow radius
-                          zIndex: 1, // Ensure it's above other element,
-                          height: 62
+                          justifyContent: 'center',
+                          elevation: 5,
+                          shadowColor: '#000',
+                          shadowOffset: { width: 0, height: 2 },
+                          shadowOpacity: 0.25,
+                          shadowRadius: 3.84,
+                          marginRight: 10, // Posisikan tombol ke kanan
+                          zIndex: 10, // Pastikan tombol berada di depan
+                          display: 'flex', // Pastikan tombol dapat ditampilkan
                         }}
                       >
                         <Text
                           style={{
                             fontFamily: fonts.primary[600],
-                            fontSize: 10,
-                            color: colors.white,
-                          }}
-                        >
-                          Hari
-                        </Text>
-
-                        {/* Render nomor hari */}
-                        <Text
-                          style={{
-                            fontFamily: fonts.primary[600],
-                            fontSize: 20,
+                            fontSize: 12,
                             color: colors.white,
                             textAlign: 'center',
                           }}
                         >
-                          {day}
+                          Minggu{'\n'}
+                          ke{'\n'}
+                          1
                         </Text>
-                        <Text style={{
-                          fontSize: 5,
-                          position: 'absolute',
-                          bottom: 0,
-                          fontFamily: fonts.primary[400],
-                          color: colors.white
-                        }}>{mulai.length > 0 ? TANGGAL : ''}</Text>
                       </View>
-                    </TouchableWithoutFeedback>
-                  );
-                })}
-                {currentWeek === 1 && (
-                  <TouchableNativeFeedback onPress={() => setCurrentWeek(2)}>
-                    <View
-                      style={{
-                        height: 61, // Ukuran tombol Minggu ke 2
-                        width: 70, // Lebar tombol diatur secara independen
-                        backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
-                        borderRadius: 10,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        elevation: 5,
-                        shadowColor: '#000',
-                        shadowOffset: { width: 0, height: 2 },
-                        shadowOpacity: 0.25,
-                        shadowRadius: 3.84,
-                        marginLeft: 10, // Posisikan tombol ke kiri
-                        zIndex: 10, // Pastikan tombol berada di depan
-                        display: 'flex', // Pastikan tombol dapat ditampilkan
-                      }}
-                    >
-                      <Text
+                    </TouchableNativeFeedback>
+                  )}
+                  {days.map((day) => {
+                    const dayAbsolute = currentWeek === 1 ? day : day + 7; // Map day to absolute day
+                    const MYBACK = user.tipe == 'Gain' ? colors.primary : colors.secondary;
+                    let TANGGAL = moment(mulai).add(day - 1, 'day').format('DD/MM/YY');
+                    let TANGGAL_DATA = moment(mulai).add(day - 1, 'day').format('YYYY-MM-DD');
+                    return (
+                      <TouchableWithoutFeedback onPress={() => {
+
+                        if (moment().format('YYYY-MM-DD') >= moment(TANGGAL_DATA).format('YYYY-MM-DD')) {
+                          filterVideo(TANGGAL_DATA);
+
+
+                        } else {
+                          // toast.show(`Maaf hari ke ${day} belum bisa di akses !`)
+                          filterVideo(TANGGAL_DATA);
+
+                        }
+
+
+                      }}>
+                        <View
+                          key={day}
+                          style={{
+                            padding: 10,
+                            backgroundColor: moment().format('YYYY-MM-DD') >= moment(TANGGAL_DATA).format('YYYY-MM-DD') ? MYBACK : colors.border,
+                            borderRadius: 10,
+                            marginRight: 10,
+                            alignItems: 'center',
+                            width: 42,
+                            marginBottom: 10, // Add space for better visibility
+                            // Shadow properties
+                            elevation: 8, // Android shadow
+                            shadowColor: '#000', // iOS shadow color
+                            shadowOffset: { width: 0, height: 4 }, // iOS shadow offset
+                            shadowOpacity: 0.3, // iOS shadow opacity
+                            shadowRadius: 4.65, // iOS shadow radius
+                            zIndex: 1, // Ensure it's above other element,
+                            height: 62
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: fonts.primary[600],
+                              fontSize: 10,
+                              color: colors.white,
+                            }}
+                          >
+                            Hari
+                          </Text>
+
+                          {/* Render nomor hari */}
+                          <Text
+                            style={{
+                              fontFamily: fonts.primary[600],
+                              fontSize: 20,
+                              color: colors.white,
+                              textAlign: 'center',
+                            }}
+                          >
+                            {day}
+                          </Text>
+                          <Text style={{
+                            fontSize: 5,
+                            position: 'absolute',
+                            bottom: 0,
+                            fontFamily: fonts.primary[400],
+                            color: colors.white
+                          }}>{mulai.length > 0 ? TANGGAL : ''}</Text>
+                        </View>
+                      </TouchableWithoutFeedback>
+                    );
+                  })}
+                  {currentWeek === 1 && (
+                    <TouchableNativeFeedback onPress={() => {
+                      setCurrentWeek(2)
+                      filterVideo(moment(mulai).add(7, 'day').format('YYYY-MM-DD'));
+
+                    }}>
+                      <View
                         style={{
-                          fontFamily: fonts.primary[600],
-                          fontSize: 12,
-                          color: colors.white,
-                          textAlign: 'center',
+                          height: 61, // Ukuran tombol Minggu ke 2
+                          width: 70, // Lebar tombol diatur secara independen
+                          backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                          borderRadius: 10,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          elevation: 5,
+                          shadowColor: '#000',
+                          shadowOffset: { width: 0, height: 2 },
+                          shadowOpacity: 0.25,
+                          shadowRadius: 3.84,
+                          marginLeft: 10, // Posisikan tombol ke kiri
+                          zIndex: 10, // Pastikan tombol berada di depan
+                          display: 'flex', // Pastikan tombol dapat ditampilkan
                         }}
                       >
-                        Minggu{'\n'}
-                        ke{'\n'}
-                        2
-                      </Text>
-                    </View>
-                  </TouchableNativeFeedback>
-                )}
-              </ScrollView>
+                        <Text
+                          style={{
+                            fontFamily: fonts.primary[600],
+                            fontSize: 12,
+                            color: colors.white,
+                            textAlign: 'center',
+                          }}
+                        >
+                          Minggu{'\n'}
+                          ke{'\n'}
+                          2
+                        </Text>
+                      </View>
+                    </TouchableNativeFeedback>
+                  )}
+                </ScrollView>
+              </View>
             </View>
-          </View>
+
+          }
         </View>
 
         {/* VIDEO */}
@@ -521,8 +569,28 @@ export default function ProgramPertama({ navigation, route }) {
 
                 {/* TEXT AREA */}
                 <View style={{ marginTop: 10 }}>
-                  <TextInput
-                    style={{
+                  {EDIT &&
+                    <TextInput
+                      style={{
+                        height: 150,
+                        textAlignVertical: 'top', // Teks dimulai dari atas
+                        borderRadius: 10,
+                        padding: 10,
+                        fontFamily: fonts.primary[400],
+                        fontSize: 12,
+                        color: colors.black,
+                        backgroundColor: '#FFFFFF',
+                      }}
+                      multiline
+                      placeholder="Belum ada rencana"
+                      placeholderTextColor="#aaa"
+                      value={userInput}
+                      onChangeText={setUserInput}
+                    />
+                  }
+
+                  {!EDIT &&
+                    <Text style={{
                       height: 150,
                       textAlignVertical: 'top', // Teks dimulai dari atas
                       borderRadius: 10,
@@ -531,13 +599,10 @@ export default function ProgramPertama({ navigation, route }) {
                       fontSize: 12,
                       color: colors.black,
                       backgroundColor: '#F7F7F7',
-                    }}
-                    multiline
-                    placeholder="Belum ada rencana"
-                    placeholderTextColor="#aaa"
-                    value={userInput}
-                    onChangeText={setUserInput}
-                  />
+                    }}>
+                      {userInput.length > 0 ? userInput : "Belum ada rencana"}
+                    </Text>
+                  }
                 </View>
 
                 <View
@@ -550,10 +615,15 @@ export default function ProgramPertama({ navigation, route }) {
                 >
                   <TouchableNativeFeedback onPress={() => {
 
-                    storeData('plan', userInput);
-                    toast.show('Rencana berhasil disimpan !', {
-                      type: 'success'
-                    })
+                    if (!EDIT) {
+                      setEDIT(true);
+                    } else {
+                      setEDIT(false);
+                      storeData('plan', userInput);
+                      toast.show('Rencana berhasil disimpan !', {
+                        type: 'success'
+                      })
+                    }
 
                   }}>
                     <View
@@ -568,7 +638,8 @@ export default function ProgramPertama({ navigation, route }) {
                       <Icon
                         style={{ left: 1, top: -2 }}
                         type="ionicon"
-                        name="checkmark-outline"
+                        name={EDIT ? 'checkmark-outline' : 'create-outline'}
+
                         size={20}
                         color={colors.white}
                       />
@@ -619,6 +690,7 @@ export default function ProgramPertama({ navigation, route }) {
                   >
                     Perjalanan Kamu
                   </Text>
+                  {mulai.length > 0 && <Text style={{ fontSize: 11, fontFamily: fonts.primary[400] }}>{moment(mulai).format('DD MMM YYYY') + ' - ' + moment(mulai).add(13, 'day').format('DD MMM YYYY')}</Text>}
 
                   <LineChart
                     data={{
@@ -754,15 +826,17 @@ export default function ProgramPertama({ navigation, route }) {
                         {/* PRODUK */}
                         <View>
                           <Image style={{
-                            width: 144,
-                            height: 142
+                            width: 100,
+                            height: 100
                           }} source={{
                             uri: webURL + item.file_produk
                           }} />
                         </View>
 
                         <View style={{
-                          marginTop: 30
+                          flex: 1,
+
+                          padding: 10
                         }}>
                           {/* JUDUL */}
 
@@ -791,10 +865,12 @@ export default function ProgramPertama({ navigation, route }) {
 
 
                           <View style={{
-                            flexDirection: "row",
-                            justifyContent: 'flex-end',
-                            alignItems: 'center',
-                            marginTop: 30
+
+                            // flexDirection: "row",
+                            // justifyContent: 'flex-end',
+
+                            alignItems: 'flex-end',
+                            // marginTop: 30
                           }}>
                             <View>
                               <TouchableNativeFeedback onPress={() => Linking.openURL(item.link_olshop)}>
@@ -804,7 +880,7 @@ export default function ProgramPertama({ navigation, route }) {
                                   borderRadius: 10,
                                   flexDirection: "row",
                                   alignItems: "center",
-                                  justifyContent: 'space-between',
+                                  // justifyContent: 'space-between',
                                   // height: 40
                                 }}>
 

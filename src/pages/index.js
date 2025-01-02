@@ -24,6 +24,7 @@ import RekomendasiMakanan from './Menu/rekomendasi';
 import AsupanKaloriMakanan from './Menu/asupankalori';
 import VideoData from './Menu/VideoData';
 import VideoDetail from './Menu/VideoDetail';
+import Login from './register/Login';
 
 
 
@@ -33,6 +34,7 @@ export {
   Splash,
   Home,
   Account,
+  Login,
   AccountEdit,
   KalkulatorKompos,
   Petunjuk,

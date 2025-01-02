@@ -74,7 +74,7 @@ export default function VideoLatihan({ navigation, route }) {
         </View>
       </ScrollView>
 
-      {item.cek == 0 &&
+      {item.cek == 0 && item.hari == item.lihat &&
 
         <View style={{ padding: 10, marginBottom: 10 }}>
           <TouchableNativeFeedback onPress={nontonVideo}>
@@ -114,7 +114,7 @@ export default function VideoLatihan({ navigation, route }) {
               source={require('../../assets/ceklist.png')} // Ganti dengan path ke gambar checklist Anda
               style={styles.checklistIcon}
             />
-            <Text style={styles.modalText}>Kamu sudah menonton video ini</Text>
+            <Text style={styles.modalText}>Kamu sudah menonton video ini </Text>
           </View>
         </View>
       </Modal>

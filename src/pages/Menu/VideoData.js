@@ -13,7 +13,8 @@ export default function VideoData({ navigation, route }) {
 
     useEffect(() => {
         axios.post(apiURL + 'daftar_nonton', {
-            fid_pengguna: route.params.id_pengguna
+            fid_pengguna: route.params.id_pengguna,
+            tipe: route.params.tipe,
         }).then(res => {
             console.log(res.data);
             setData(res.data);

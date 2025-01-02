@@ -1,21 +1,31 @@
 import { View, Text, TouchableNativeFeedback, ScrollView, Image, TouchableWithoutFeedback } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { MyHeader } from '../../components';
-import { Color, colors, fonts } from '../../utils';
+import { Color, colors, fonts, windowWidth } from '../../utils';
 import axios from 'axios';
-import { apiURL, webURL } from '../../utils/localStorage';
+import { apiURL, getData, webURL } from '../../utils/localStorage';
 import { FlatList } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function Telusuri({ navigation }) {
 
   const [data, setData] = useState([]);
+  const isFocus = useIsFocused();
+  const [user, setUser] = useState({});
   useEffect(() => {
-    axios.post(apiURL + 'artikel').then(res => {
-      console.log(res.data.filter(i => i.kategori == 'Banner'));
+    if (isFocus) {
+      getData('user').then(u => {
+        setUser(u);
+        axios.post(apiURL + 'artikel', {
+          tipe: u.tipe
+        }).then(res => {
+          console.log(res.data.filter(i => i.kategori == 'Banner'));
 
-      setData(res.data);
-    })
-  }, [])
+          setData(res.data);
+        })
+      })
+    }
+  }, [isFocus])
   // Daftar kategori
   const categories = [
     { id: 1, name: 'Latihan', color: Color.blueGray[100] },
@@ -85,7 +95,7 @@ export default function Telusuri({ navigation }) {
           {/* CATEGORY */}
           <View>
             {/* Menghilangkan indikator scroll dengan showsHorizontalScrollIndicator={false} */}
-            {/* <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -121,7 +131,7 @@ export default function Telusuri({ navigation }) {
                   </TouchableNativeFeedback>
                 ))}
               </View>
-            </ScrollView> */}
+            </ScrollView>
           </View>
 
           {/* SCROLL GALLERY (Gambar) */}
@@ -142,8 +152,9 @@ export default function Telusuri({ navigation }) {
                         uri: webURL + item.file_artikel
                       }}
                       style={{
-                        width: 353,
-                        height: 288,
+                        width: windowWidth - 20,
+                        resizeMode: 'contain',
+                        height: 250,
                         borderRadius: 8,
                       }}
                     />
@@ -163,7 +174,7 @@ export default function Telusuri({ navigation }) {
             <Text style={{
               fontFamily: fonts.primary[600],
               fontSize: 15,
-              color: colors.primary
+              color: user.tipe == 'Gain' ? colors.primary : colors.secondary
 
             }}>Mitos Atau Fakta?</Text>
             <FlatList showsHorizontalScrollIndicator={false} horizontal data={data.filter(i => i.kategori == 'Mitos atau Fakta')} renderItem={({ item, index }) => {
@@ -183,6 +194,7 @@ export default function Telusuri({ navigation }) {
                       }}
                       style={{
                         width: 160,
+
                         height: 200,
                         borderRadius: 8,
                       }}
@@ -214,7 +226,7 @@ export default function Telusuri({ navigation }) {
             <Text style={{
               fontFamily: fonts.primary[600],
               fontSize: 15,
-              color: colors.primary
+              color: user.tipe == 'Gain' ? colors.primary : colors.secondary
 
             }}>Rekomendasi{'\n'}
               Makanan Sehat
@@ -268,7 +280,7 @@ export default function Telusuri({ navigation }) {
             <Text style={{
               fontFamily: fonts.primary[600],
               fontSize: 15,
-              color: colors.primary
+              color: user.tipe == 'Gain' ? colors.primary : colors.secondary
 
             }}>Asupan Kalori{'\n'}
               Tambahan
@@ -315,7 +327,7 @@ export default function Telusuri({ navigation }) {
 
 
           {/* REKOMENDASI */}
-          {/* <View style={{
+          <View style={{
             padding: 10
           }}>
 
@@ -323,7 +335,7 @@ export default function Telusuri({ navigation }) {
             <Text style={{
               fontFamily: fonts.primary[600],
               fontSize: 15,
-              color: colors.primary,
+              color: user.tipe == 'Gain' ? colors.primary : colors.secondary
 
             }}>Rekomendasi</Text>
             <View
@@ -363,7 +375,7 @@ export default function Telusuri({ navigation }) {
               ))}
             </View>
 
-          </View> */}
+          </View>
           <View>
 
           </View>

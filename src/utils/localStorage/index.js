@@ -21,7 +21,7 @@ export const getData = async key => {
 
 
 export const apiURL = 'https://genory.zavalabs.com/api/';
-// export const apiURL = 'http://172.20.10.4/genory/api/';
+// export const apiURL = 'http://192.168.60.196/genory/api/';
 export const MYAPP = 'GENORY';
 export const api_token = 'd4e729bcd8aab6f0a710e8ca3d31524cb5783dd1d63ddbf32fbed278c435605f';
 export const webURL = apiURL.replace("api/", "");

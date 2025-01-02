@@ -4,12 +4,14 @@ import { Icon } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Color, colors } from '../../utils/colors';
 import { fonts } from '../../utils/fonts';
+import moment from 'moment';
 
 export default function MyTimePicker({
   label,
   iconname = 'time',
   onTimeChange,
   value,
+  realvalue,
   borderColor = Color.blueGray[300],
 }) {
   const [show, setShow] = useState(false);
@@ -28,29 +30,29 @@ export default function MyTimePicker({
 
   return (
     <View style={{}}>
-      <Text style={{
+      {/* <Text style={{
         ...fonts.subheadline3,
         color: colors.primary,
         marginBottom: 8,
-      }}>{label}</Text>
+      }}>{label}</Text> */}
       <TouchableOpacity onPress={showTimepicker} style={{
-        height: 50,
+        // height: 100,
+        width: 130,
         flexDirection: 'row',
         alignItems: 'center',
-        borderWidth: 1,
-        borderRadius: 8,
         borderColor: borderColor,
         backgroundColor: 'white',
-        paddingLeft: 12,
       }}>
-        <Icon type='ionicon' name={iconname} color={Color.blueGray[300]} size={24} />
+
         <Text style={{
-          ...fonts.body3,
+          // ...fonts.body3,
           flex: 1,
-          paddingLeft: 10,
+          fontSize: 30,
+          fontFamily: fonts.primary[800],
           color: Color.blueGray[900],
         }}>
-          {time ? time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Pilih Waktu'}
+          {realvalue}
+          {/* {time ? moment(time).format('HH:mm') : 'Pilih Waktu'} */}
         </Text>
       </TouchableOpacity>
       {show && (

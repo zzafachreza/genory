@@ -15,7 +15,8 @@ export default function VideoDetail({ navigation, route }) {
 
     useEffect(() => {
         axios.post(apiURL + 'youtube', {
-            fid_pengguna: route.params.user.id_pengguna
+            fid_pengguna: route.params.user.id_pengguna,
+            tipe: route.params.user.tipe,
         }).then(res => {
             console.log(res.data);
             setData(res.data);

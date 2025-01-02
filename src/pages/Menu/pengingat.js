@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Switch, StyleSheet, ScrollView, FlatList, TextInput, Alert } from 'react-native';
 import { Color, colors, fonts } from '../../utils';
-import { MyHeader } from '../../components';
+import { MyHeader, MyTimePicker } from '../../components';
 import { getData, MYAPP, storeData } from '../../utils/localStorage';
 import { useToast } from 'react-native-toast-notifications';
 import moment from 'moment';
@@ -10,7 +10,7 @@ import PushNotification from "react-native-push-notification";
 import { maskJs, maskCurrency } from 'mask-js';
 
 export default function PengingatProgram({ navigation, route }) {
-
+  const week = route.params.week;
   const [user, setUser] = useState({});
   const [mulai, setMulai] = useState('');
   const [data, setData] = useState([]);
@@ -56,7 +56,7 @@ export default function PengingatProgram({ navigation, route }) {
       }
     })
   }
-
+  const WEEK = ['Pertama', 'Kedua']
   const isFocus = useIsFocused();
   useEffect(() => {
 
@@ -69,12 +69,12 @@ export default function PengingatProgram({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <MyHeader onPress={() => navigation.goBack()} title="Pengingat" />
+      <MyHeader onPress={() => navigation.goBack()} title={`Pengingat Minggu ${WEEK[week - 1]}`} />
       <View style={{
         flex: 1,
         paddingVertical: 16
       }}>
-        <FlatList data={data} renderItem={({ item, index }) => {
+        <FlatList data={week == 1 ? data.filter(i => i.hari <= 7) : data.filter(i => i.hari > 7)} renderItem={({ item, index }) => {
           return (
             <View style={{
               flexDirection: 'row',
@@ -88,7 +88,15 @@ export default function PengingatProgram({ navigation, route }) {
               <View style={{
                 flex: 1,
               }}>
-                <TextInput maxLength={5} onChangeText={x => {
+
+                <MyTimePicker realvalue={item.jam} onTimeChange={x => {
+
+                  let tmp = [...data];
+                  tmp[index].jam = moment(x).format('HH:mm');
+                  setData(tmp);
+                  storeData('alarm', tmp)
+                }} />
+                {/* <TextInput maxLength={5} onChangeText={x => {
 
                   let tmp = [...data];
                   tmp[index].jam = maskJs('99:99', x);
@@ -104,7 +112,7 @@ export default function PengingatProgram({ navigation, route }) {
                   color: user.tipe == 'Gain' ? colors.primary : colors.secondary,
                 }}
                   value={item.jam}
-                />
+                /> */}
                 <Text style={{
                   fontFamily: fonts.primary[400],
                   fontSize: 11,
