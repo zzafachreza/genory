@@ -60,7 +60,7 @@ const MainApp = () => {
 
 export default function Router() {
   return (
-    <Stack.Navigator initialRouteName='Splash'>
+    <Stack.Navigator initialRouteName='GetStarted'>
       <Stack.Screen
         name="Splash"
         component={Splash}

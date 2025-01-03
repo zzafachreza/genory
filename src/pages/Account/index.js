@@ -169,7 +169,7 @@ export default function ({ navigation, route }) {
 
 
     const btnKeluar = () => {
-        Alert.alert(MYAPP, 'Apakah kamu yakin akan keluar ?', [
+        Alert.alert(MYAPP, 'Apakah kamu yakin akan keluar ? Jika kamu keluar maka tahapan latihanmu akan dimulai dari awal lagi ', [
             {
                 text: 'Batal',
                 style: "cancel"
@@ -178,8 +178,8 @@ export default function ({ navigation, route }) {
                 text: 'Keluar',
                 onPress: () => {
                     storeData('user', null);
-                    // storeData('mulai', null);
-                    // storeData('alarm', null)
+                    storeData('mulai', null);
+                    storeData('alarm', null);
                     navigation.reset({
                         index: 0,
                         routes: [{ name: 'Splash' }],
@@ -197,7 +197,6 @@ export default function ({ navigation, route }) {
                         marginVertical: Math.round(windowWidth / 22) / 3,
                         width: Math.round(windowWidth / 2.2),
                         height: 65,
-
                         // padding: 5,
                         paddingHorizontal: 10,
                         backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
@@ -276,7 +275,7 @@ export default function ({ navigation, route }) {
                                 width: 60,
                                 height: 60,
                                 borderWidth: 1,
-                                borderColor: colors.primary,
+                                borderColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
                                 overflow: 'hidden',
                                 borderRadius: 100,
                                 justifyContent: 'center',
@@ -300,7 +299,7 @@ export default function ({ navigation, route }) {
                                 <Text style={{
                                     fontFamily: fonts.primary[600],
                                     fontSize: 15,
-                                    color: colors.primary,
+                                    color: user.tipe == 'Gain' ? colors.primary : colors.secondary,
 
                                 }}>Halo Kak {user.nama}</Text>
 

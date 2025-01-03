@@ -76,10 +76,15 @@ export default function RingkasanRencana({ navigation }) {
                                 <View style={{
                                     padding: 10
                                 }}>
-                                    <Image style={{
+                                    {user.tipe == 'Gain' && <Image style={{
                                         width: 53,
                                         height: 138,
-                                    }} source={user.jenis_kelamin == 'Perempuan' ? require('../../assets/img_gender.png') : require('../../assets/img_male.png')} />
+                                    }} source={user.jenis_kelamin == 'Perempuan' ? require('../../assets/img_gender.png') : require('../../assets/img_male.png')} />}
+
+                                    {user.tipe == 'Loss' && <Image style={{
+                                        width: 53,
+                                        height: 138,
+                                    }} source={user.jenis_kelamin == 'Perempuan' ? require('../../assets/img_genre2.png') : require('../../assets/img_male2.png')} />}
                                 </View>
 
 
@@ -87,16 +92,16 @@ export default function RingkasanRencana({ navigation }) {
                                 <View>
 
                                     {/* JENEIS KELAMIN */}
-                                    <Text style={{ fontFamily: fonts.primary[700], fontSize: 17, color: colors.primary }}>• {user.jenis_kelamin}</Text>
+                                    <Text style={{ fontFamily: fonts.primary[700], fontSize: 17, color: user.tipe == 'Gain' ? colors.primary : colors.secondary, }}>• {user.jenis_kelamin}</Text>
 
                                     {/* USIA */}
-                                    <Text style={{ fontFamily: fonts.primary[700], fontSize: 17, color: colors.primary }}>• {moment().diff(user.tanggal_lahir, 'year')} Tahun</Text>
+                                    <Text style={{ fontFamily: fonts.primary[700], fontSize: 17, color: user.tipe == 'Gain' ? colors.primary : colors.secondary, }}>• {moment().diff(user.tanggal_lahir, 'year')} Tahun</Text>
 
                                     {/* IMT */}
-                                    <Text style={{ fontFamily: fonts.primary[700], fontSize: 17, color: colors.primary }}>• IMT = {user.imt} ( {user.hasil} ) </Text>
+                                    <Text style={{ fontFamily: fonts.primary[700], fontSize: 17, color: user.tipe == 'Gain' ? colors.primary : colors.secondary, }}>• IMT = {user.imt} ( {user.hasil} ) </Text>
 
                                     {/* TARGET */}
-                                    <Text style={{ fontFamily: fonts.primary[700], fontSize: 17, color: colors.primary }}>• Target = {user.berat_target} Kg</Text>
+                                    <Text style={{ fontFamily: fonts.primary[700], fontSize: 17, color: user.tipe == 'Gain' ? colors.primary : colors.secondary, }}>• Target = {user.berat_target} Kg</Text>
 
                                 </View>
                             </View>
