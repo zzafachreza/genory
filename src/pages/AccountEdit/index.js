@@ -22,12 +22,14 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import moment from 'moment';
 import SweetAlert from 'react-native-sweet-alert';
 import MyLoading from '../../components/MyLoading';
+import { useToast } from 'react-native-toast-notifications';
 
 export default function AccountEdit({ navigation, route }) {
 
     const TIPE = route.params.tipe;
     const [kirim, setKirim] = useState(route.params);
     const [loading, setLoading] = useState(false);
+    const toast = useToast();
     const sendServer = () => {
         setLoading(true);
         console.log(kirim);
@@ -37,17 +39,12 @@ export default function AccountEdit({ navigation, route }) {
             setLoading(false);
 
             if (res.data.status == 200) {
-                SweetAlert.showAlertWithOptions({
-                    title: MYAPP,
-                    subTitle: res.data.message,
-                    style: 'success',
-                    cancellable: true
-                },
-                    callback => {
-                        storeData('user', res.data.data);
-                        navigation.replace('MainApp');
-                    });
 
+                toast.show(res.data.message, {
+                    type: 'success'
+                });
+                storeData('user', res.data.data);
+                navigation.replace('MainApp');
 
             }
         })
@@ -193,11 +190,11 @@ export default function AccountEdit({ navigation, route }) {
                     onChangeText={(x) => setKirim({ ...kirim, 'berat_badan': x })}
                 />
 
-                <MyInput backgroundColor='#F7F7F7' borderColor={TIPE == 'Gain' ? colors.primary : colors.lossColor} label="Password" secureTextEntry={true} onChangeText={x => setKirim({ ...kirim, newpassword: x })} placeholder="Kosongkan jika tidak diubah" />
+                {/* <MyInput backgroundColor='#F7F7F7' borderColor={TIPE == 'Gain' ? colors.primary : colors.lossColor} label="Password" secureTextEntry={true} onChangeText={x => setKirim({ ...kirim, newpassword: x })} placeholder="Kosongkan jika tidak diubah" /> */}
                 <MyGap jarak={20} />
                 {loading && <MyLoading />}
 
-                {!loading && <MyButton warna={colors.secondary} colorText={colors.white} iconColor={colors.white} onPress={sendServer} title="Simpan Perubahan" Icons="download-outline" />}
+                {!loading && <MyButton warna={kirim.tipe == 'Gain' ? colors.primary : colors.secondary} colorText={colors.white} iconColor={colors.white} onPress={sendServer} title="Simpan Perubahan" Icons="download-outline" />}
                 <MyGap jarak={20} />
             </ScrollView>
         </SafeAreaView >

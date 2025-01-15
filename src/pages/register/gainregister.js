@@ -133,6 +133,7 @@ export default function GainRegister({ navigation, route }) {
                     tipe: TIPE,
                 })
                 .then(response => {
+                    console.log(response.data)
                     if (response.data.status == 404) {
 
                         toast.show(response.data.message, {
@@ -249,15 +250,7 @@ export default function GainRegister({ navigation, route }) {
                                 onChangeText={(x) => setKirim({ ...kirim, 'telepon': x })}
                             />
 
-                            <MyInput
-                                borderColor={TIPE == 'Gain' ? colors.primary : colors.lossColor}
-                                placeholder="Isi Kata Sandi"
-                                backgroundColor='#F7F7F7'
-                                label="Kata Sandi"
-                                secureTextEntry={true}
-                                value={kirim.password}
-                                onChangeText={(x) => setKirim({ ...kirim, 'password': x })}
-                            />
+
 
                             <MyCalendar
                                 borderColor={TIPE == 'Gain' ? colors.primary : colors.lossColor}
@@ -293,6 +286,16 @@ export default function GainRegister({ navigation, route }) {
                                 label="Berat Badan (kg)"
                                 value={kirim.berat_badan}
                                 onChangeText={(x) => setKirim({ ...kirim, 'berat_badan': x })}
+                            />
+
+                            <MyInput
+                                borderColor={TIPE == 'Gain' ? colors.primary : colors.lossColor}
+                                placeholder="Isi Kata Sandi"
+                                backgroundColor='#F7F7F7'
+                                label="Kata Sandi"
+                                secureTextEntry={true}
+                                value={kirim.password}
+                                onChangeText={(x) => setKirim({ ...kirim, 'password': x })}
                             />
 
                             <View style={{

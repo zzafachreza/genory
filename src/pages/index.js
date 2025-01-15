@@ -25,7 +25,8 @@ import AsupanKaloriMakanan from './Menu/asupankalori';
 import VideoData from './Menu/VideoData';
 import VideoDetail from './Menu/VideoDetail';
 import Login from './register/Login';
-
+import Calculator from './Menu/Calculator';
+import CalculatorHasil from './Menu/CalculatorHasil';
 
 
 
@@ -57,7 +58,10 @@ export {
   RekomendasiMakanan,
   AsupanKaloriMakanan,
   VideoData,
-  VideoDetail
+  VideoDetail,
+  Calculator,
+  CalculatorHasil
+
 
 
 

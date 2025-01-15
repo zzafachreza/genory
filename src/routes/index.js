@@ -30,6 +30,8 @@ import {
   AsupanKaloriMakanan,
   VideoData,
   VideoDetail,
+  Calculator,
+  CalculatorHasil,
 
 
 
@@ -122,6 +124,24 @@ export default function Router() {
       <Stack.Screen
         name="Petunjuk"
         component={Petunjuk}
+        options={{
+          headerShown: false,
+
+        }}
+      />
+
+      <Stack.Screen
+        name="Calculator"
+        component={Calculator}
+        options={{
+          headerShown: false,
+
+        }}
+      />
+
+      <Stack.Screen
+        name="CalculatorHasil"
+        component={CalculatorHasil}
         options={{
           headerShown: false,
 

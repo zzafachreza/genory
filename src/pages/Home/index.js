@@ -239,18 +239,38 @@ export default function Home({ navigation, route }) {
               paddingHorizontal: 20,
 
             }}>
+
+              <TouchableNativeFeedback onPress={() => navigation.navigate('Calculator', {
+                user: user,
+                judul: 'Kalkulator Diet'
+              })}>
+                <View style={{
+                  padding: 10,
+                  borderRadius: 30,
+                  borderWidth: 2,
+                  marginBottom: 16,
+                  backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                  borderColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                }}>
+                  <Text style={{ fontFamily: fonts.primary[600], fontSize: 15, textAlign: 'center', color: colors.white }}>Kalkulator Diet</Text>
+                </View>
+              </TouchableNativeFeedback>
+
               <YouTubeIframe
-                height={200}
+                height={186}
                 width={"100%"}
                 videoId={youtube}
                 play={false}
                 onChangeState={event => console.log(event)}
                 onReady={event => console.log("Video is ready")}
               />
+              {/* KALKULATOR DIET */}
+
 
               {/* PROGRAM PERTAMA */}
               <TouchableNativeFeedback onPress={() => navigation.navigate('ProgramPertama', { week: 1 })}>
                 <View style={{
+
                   padding: 10,
                   borderRadius: 30,
                   borderWidth: 2,

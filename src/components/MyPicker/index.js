@@ -58,7 +58,7 @@ export default function MySecondPicker({
           style={{
             width: '90%',
             height: 50,
-            left: 30,
+            left: 20,
             justifyContent: 'center',
           }}
           onPress={() => setIsModalVisible(true)} // Buka modal saat diklik
@@ -66,7 +66,7 @@ export default function MySecondPicker({
           <Text
             style={{
               fontSize: 15,
-              fontFamily: fonts.primary[600],
+              fontFamily: fonts.primary[400],
               color: colors.black,
             }}>
             {value ? value : label}
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 16,
     width: 300,
-    maxHeight: 150,
+    // maxHeight: 150,
     elevation: 5,
     borderWidth: 1,
     borderColor: colors.primary
