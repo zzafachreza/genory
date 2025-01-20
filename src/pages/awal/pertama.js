@@ -1,10 +1,11 @@
-import { View, Text, PermissionsAndroid, ImageBackground, Image, TouchableNativeFeedback, ScrollView, Linking, TouchableOpacity } from 'react-native'
+import { View, Text, PermissionsAndroid, ImageBackground, Image, TouchableNativeFeedback, ScrollView, Linking, TouchableOpacity, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { fonts, colors } from '../../utils'
 import PushNotification from "react-native-push-notification";
 import moment from 'moment';
 import axios from 'axios';
 import { apiURL } from '../../utils/localStorage';
+
 
 export default function PertamaNextSlide({ navigation }) {
 
@@ -25,26 +26,14 @@ export default function PertamaNextSlide({ navigation }) {
         __GetMedsos();
     }, [])
 
-    const nextPage = async () => {
 
-        await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-        navigation.navigate('KeduaNextSlide')
-        // let JADWAL = new Date(Date.now() + 4 * 1000);
-        // PushNotification.localNotificationSchedule({
-        //     channelId: "genory",
-        //     title: 'HARI PERTAMA',
-        //     soundName: 'suara',
-        //     //... You can use all the options from localNotifications
-        //     message: "My Notification Message", // (required)
-        //     date: JADWAL, // in 60 secs
-        //     allowWhileIdle: true, // (optional) set notification to work while on doze, default: false
 
-        // });
-        // console.log('jadwal', JADWAL);
-        // console.log('momoent', moment().toISOString())
-
-    }
-
+const nextPage = () => {
+    console.log('Navigating to the next slide...');
+    navigation.navigate('KeduaNextSlide');
+  };
+  
+      
 
     return (
         <View style={{
@@ -90,10 +79,10 @@ export default function PertamaNextSlide({ navigation }) {
                             marginTop: 0,
                         }}>
                             <Image style={{
-                                width: 332,
-                                height: 301,
-
-                            }} source={require('../../assets/cewe_1.png')} />
+                                width: 218,
+                                height: 325,
+                                top:5
+                            }} source={require('../../assets/pegang_produk.png')} />
                         </View>
 
                         <View style={{

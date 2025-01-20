@@ -111,10 +111,11 @@ export default function KeduaNextSlide({ navigation }) {
                             marginTop: 0,
                         }}>
                             <Image style={{
-                                width: 251,
-                                height: 335,
+                                width: 254,
+                                height: 387,
+                                top:-10
 
-                            }} source={require('../../assets/cewe_2.png')} />
+                            }} source={require('../../assets/foto_tiga.png')} />
                         </View>
 
 

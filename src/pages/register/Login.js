@@ -108,7 +108,7 @@ export default function Login({ navigation, route }) {
                                 height: 280,
                                 resizeMode: 'contain'
 
-                            }} source={require('../../assets/cewe_1.png')} />
+                            }} source={require('../../assets/pasang_produk.png')} />
                         </View>
 
 
@@ -131,8 +131,8 @@ export default function Login({ navigation, route }) {
                             {/* Pasword */}
                             <MyInput
                                 borderColor={TIPE == 'Gain' ? colors.primary : colors.secondary}
-                                label="Kata Sandi"
-                                placeholder="Isi kata sandi"
+                                label="Kode Akses"
+                                placeholder="Isi Kode Akses"
                                 value={kirim.password}
                                 onChangeText={(x) => setKirim({ ...kirim, password: x })}
                                 secureTextEntry={true}

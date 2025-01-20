@@ -242,7 +242,7 @@ export default function Home({ navigation, route }) {
 
               <TouchableNativeFeedback onPress={() => navigation.navigate('Calculator', {
                 user: user,
-                judul: 'Kalkulator Diet'
+                judul: 'Hitung Kalori Harianmu'
               })}>
                 <View style={{
                   padding: 10,
@@ -252,7 +252,7 @@ export default function Home({ navigation, route }) {
                   backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
                   borderColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
                 }}>
-                  <Text style={{ fontFamily: fonts.primary[600], fontSize: 15, textAlign: 'center', color: colors.white }}>Kalkulator Diet</Text>
+                  <Text style={{ fontFamily: fonts.primary[600], fontSize: 15, textAlign: 'center', color: colors.white }}>Hitung Kalori Harianmu</Text>
                 </View>
               </TouchableNativeFeedback>
 

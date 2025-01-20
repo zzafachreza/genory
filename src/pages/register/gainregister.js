@@ -290,9 +290,9 @@ export default function GainRegister({ navigation, route }) {
 
                             <MyInput
                                 borderColor={TIPE == 'Gain' ? colors.primary : colors.lossColor}
-                                placeholder="Isi Kata Sandi"
+                                placeholder="Isi Kode Akses"
                                 backgroundColor='#F7F7F7'
-                                label="Kata Sandi"
+                                label="Kode Akses"
                                 secureTextEntry={true}
                                 value={kirim.password}
                                 onChangeText={(x) => setKirim({ ...kirim, 'password': x })}
