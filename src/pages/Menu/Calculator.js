@@ -263,13 +263,13 @@ export default function Calculator({ navigation, route }) {
                             flex: 1,
                             paddingRight: 5
                         }}>
-                            <MyInput value={kirim.berat_badan} onChangeText={x => setKirim({ ...kirim, berat_badan: x })} iconname='speedometer-outline' keyboardType='number-pad' label="Berat Badan" placeholder="kg" />
+                            <MyInput borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.berat_badan} onChangeText={x => setKirim({ ...kirim, berat_badan: x })} iconname='speedometer-outline' keyboardType='number-pad' label="Berat Badan" placeholder="kg" />
                         </View>
                         <View style={{
                             flex: 1,
                             paddingLeft: 5
                         }}>
-                            <MyInput value={kirim.tinggi_badan} onChangeText={x => setKirim({ ...kirim, tinggi_badan: x })} iconname='body-outline' keyboardType='number-pad' label="Tinggi Badan" placeholder="cm" />
+                            <MyInput borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.tinggi_badan} onChangeText={x => setKirim({ ...kirim, tinggi_badan: x })} iconname='body-outline' keyboardType='number-pad' label="Tinggi Badan" placeholder="cm" />
                         </View>
                     </View>
                     <View style={{
@@ -281,13 +281,13 @@ export default function Calculator({ navigation, route }) {
                             flex: 1,
                             paddingRight: 5
                         }}>
-                            <MyInput value={kirim.usia} onChangeText={x => setKirim({ ...kirim, usia: x })} iconname='person-outline' keyboardType='number-pad' label="Usia" placeholder="tahun" />
+                            <MyInput borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.usia} onChangeText={x => setKirim({ ...kirim, usia: x })} iconname='person-outline' keyboardType='number-pad' label="Usia" placeholder="tahun" />
                         </View>
                         <View style={{
                             flex: 1,
                             paddingLeft: 5
                         }}>
-                            <MyPicker value={kirim.jenis_kelamin} onChange={x => setKirim({
+                            <MyPicker borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.jenis_kelamin} onChange={x => setKirim({
                                 ...kirim,
                                 jenis_kelamin: x
                             })} label="Jenis Kelamin" data={[
@@ -301,12 +301,12 @@ export default function Calculator({ navigation, route }) {
 
                     </View>
 
-                    <MyPicker value={kirim.tujuan} onChange={x => setKirim({
+                    <MyPicker borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.tujuan} onChange={x => setKirim({
                         ...kirim,
                         tujuan: x
                     })} label="Tujuan Diet" data={TJN_DATA} />
 
-                    <MyPicker value={kirim.aktifitas} onChange={x => setKirim({
+                    <MyPicker borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.aktifitas} onChange={x => setKirim({
                         ...kirim,
                         aktifitas: x
                     })} label="Aktivitas Fisik" data={ACT_DATA} />

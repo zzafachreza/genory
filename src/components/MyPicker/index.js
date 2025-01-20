@@ -81,7 +81,7 @@ export default function MySecondPicker({
             top: 13,
             backgroundColor: Color.white[900],
           }}>
-          <Icon type="ionicon" name="caret-down-outline" color={colors.primary} size={24} />
+          <Icon type="ionicon" name="caret-down-outline" color={borderColor} size={24} />
         </View>
       </View>
 

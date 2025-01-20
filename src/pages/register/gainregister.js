@@ -160,7 +160,8 @@ export default function GainRegister({ navigation, route }) {
 
     return (
         <View style={{
-            flex: 1
+            flex: 1,
+            backgroundColor: colors.white
         }}>
             <ImageBackground source={TIPE == 'Gain' ? require('../../assets/bgimg.png') : require('../../assets/bgloss.png')} style={{
                 width: '100%',

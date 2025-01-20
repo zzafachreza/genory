@@ -28,12 +28,13 @@ export default function PertamaNextSlide({ navigation }) {
 
 
 
-const nextPage = () => {
-    console.log('Navigating to the next slide...');
-    navigation.navigate('KeduaNextSlide');
-  };
-  
-      
+    const nextPage = async () => {
+        await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+        console.log('Navigating to the next slide...');
+        navigation.navigate('KeduaNextSlide');
+    };
+
+
 
     return (
         <View style={{
@@ -81,7 +82,7 @@ const nextPage = () => {
                             <Image style={{
                                 width: 218,
                                 height: 325,
-                                top:5
+                                top: 5
                             }} source={require('../../assets/pegang_produk.png')} />
                         </View>
 

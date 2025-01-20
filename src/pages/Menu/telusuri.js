@@ -42,36 +42,7 @@ export default function Telusuri({ navigation }) {
     { id: 4, name: 'Rekomendasi Makanan Sehat', color: Color.blueGray[100] },
   ];
 
-  // Daftar gambar untuk ditampilkan dalam scroll
-  const images = [
-    { id: 1, source: require('../../assets/slider1.png') },
-    { id: 2, source: require('../../assets/slider2.png') },
-    { id: 3, source: require('../../assets/slider1.png') },
 
-  ];
-
-  const fakta_or_mitor = [
-    { id: 1, source: require('../../assets/mitos_1.png'), navigateTo: 'FaktaMitos', params: { id: 1 } },
-    { id: 2, source: require('../../assets/mitos_2.png'), navigateTo: 'FaktaMitos', params: { id: 2 } },
-    { id: 3, source: require('../../assets/mitos_3.png'), navigateTo: 'FaktaMitos', params: { id: 3 } },
-    { id: 4, source: require('../../assets/mitos_4.png'), navigateTo: 'FaktaMitos', params: { id: 4 } },
-
-  ];
-
-  const makanan_sehat = [
-    { id: 1, source: require('../../assets/makanan_sehat1.png'), navigateTo: 'RekomendasiMakananSehat', params: { id: 1 } },
-    { id: 2, source: require('../../assets/makanan_sehat2.png'), navigateTo: 'RekomendasiMakananSehat', params: { id: 2 } },
-    { id: 3, source: require('../../assets/makanan_sehat3.png'), navigateTo: 'RekomendasiMakananSehat', params: { id: 3 } },
-    { id: 4, source: require('../../assets/makanan_sehat4.png'), navigateTo: 'RekomendasiMakananSehat', params: { id: 4 } },
-
-  ];
-
-  const asupan_kalori = [
-    { id: 1, source: require('../../assets/makanan_sehat1.png'), navigateTo: 'AsupanKaloriTambahan', params: { id: 1 } },
-    { id: 2, source: require('../../assets/makanan_sehat2.png'), navigateTo: 'AsupanKaloriTambahan', params: { id: 2 } },
-    { id: 3, source: require('../../assets/makanan_sehat3.png'), navigateTo: 'AsupanKaloriTambahan', params: { id: 3 } },
-    { id: 4, source: require('../../assets/makanan_sehat4.png'), navigateTo: 'AsupanKaloriTambahan', params: { id: 4 } },
-  ]
 
   return (
     <View

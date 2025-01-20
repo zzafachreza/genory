@@ -85,6 +85,7 @@ export default function Login({ navigation, route }) {
     return (
         <SafeAreaView style={{
             flex: 1,
+            backgroundColor: colors.white,
         }}
         >
 
