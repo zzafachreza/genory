@@ -148,7 +148,7 @@ export default function Login({ navigation, route }) {
                                     textAlign: 'right',
                                     ...fonts.subheadline3,
 
-                                }}>Lupa Kata Sandi?</Text>
+                                }}>Minta Kode Akses</Text>
                             </TouchableOpacity>
                             {/* Button */}
                             <MyGap jarak={5} />

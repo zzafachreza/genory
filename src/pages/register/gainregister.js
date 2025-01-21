@@ -1,5 +1,5 @@
-import { View, Text, ScrollView, ImageBackground, TouchableWithoutFeedback } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, ScrollView, ImageBackground, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { colors, fonts } from '../../utils'
 import { MyCalendar, MyGap, MyInput, MyPicker } from '../../components'
 import { showMessage } from 'react-native-flash-message';
@@ -20,6 +20,16 @@ export default function GainRegister({ navigation, route }) {
     const toast = useToast();
 
     const TIPE = route.params.tipe;
+
+    const [comp, setComp] = useState({})
+
+    useEffect(() => {
+
+
+        axios.post(apiURL + 'company').then(res => {
+            setComp(res.data.data);
+        })
+    }, []);
 
 
     const [kirim, setKirim] = useState({
@@ -298,6 +308,18 @@ export default function GainRegister({ navigation, route }) {
                                 value={kirim.password}
                                 onChangeText={(x) => setKirim({ ...kirim, 'password': x })}
                             />
+                            <TouchableOpacity onPress={() => {
+                                Linking.openURL('https://wa.me/' + comp.tlp + '?text=Halo *Admin* saya lupa kata sandi')
+                            }} style={{
+                                padding: 10,
+                            }}>
+                                <Text style={{
+                                    color: TIPE == 'Gain' ? colors.primary : colors.secondary,
+                                    textAlign: 'right',
+                                    ...fonts.subheadline3,
+
+                                }}>Minta Kode Akses</Text>
+                            </TouchableOpacity>
 
                             <View style={{
                                 marginTop: 20

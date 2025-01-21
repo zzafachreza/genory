@@ -230,7 +230,7 @@ export default function Home({ navigation, route }) {
               fontSize: 13,
               color: user.tipe == 'Gain' ? colors.primary : colors.secondary,
               textAlign: "center",
-              marginBottom: 10,
+              marginBottom: 20,
             }}>Capai targetmu lebih cepat dan sehat!</Text>
 
 
@@ -248,7 +248,7 @@ export default function Home({ navigation, route }) {
                   padding: 10,
                   borderRadius: 30,
                   borderWidth: 2,
-                  marginBottom: 16,
+                  marginBottom: 20,
                   backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
                   borderColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
                 }}>
@@ -257,7 +257,7 @@ export default function Home({ navigation, route }) {
               </TouchableNativeFeedback>
 
               <YouTubeIframe
-                height={186}
+                height={200}
                 width={"100%"}
                 videoId={youtube}
                 play={false}
