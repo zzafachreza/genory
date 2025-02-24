@@ -197,7 +197,7 @@ export default function GainRegister({ navigation, route }) {
                                     textAlign: 'center',
 
                                 }}>
-                                    Testing Weight {TIPE} Program
+                                    Weight {TIPE} Program
                                 </Text>
                                 <Text style={{
                                     fontFamily: fonts.primary[400],
