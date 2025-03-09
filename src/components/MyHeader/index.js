@@ -1,65 +1,65 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Modal } from 'react-native';
-import { MyDimensi, colors, fonts, windowWidth, Color } from '../../utils';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
 import { getData } from '../../utils/localStorage';
-import MyMenu from '../MyMenu';
+import { colors, fonts } from '../../utils';
+
 export default function MyHeader({ onPress, color = colors.white, title, icon = false, iconname = 'search' }) {
   const navigation = useNavigation();
+  const [user, setUser] = useState(null);
 
-  const [user, setUser] = useState({});
   useEffect(() => {
-    getData('user').then(u => setUser(u));
-  }, [])
+    getData('user').then(u => setUser(u)).catch(err => console.error('Gagal mengambil data user:', err));
+  }, []);
 
   return (
+    <View style={[
+      styles.headerContainer,
+      { backgroundColor: user?.tipe === 'Gain' ? colors.primary : colors.secondary }
+    ]}>
 
-
-    <View style={{
-      marginTop: 0,
-      marginHorizontal: 0,
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
-      paddingHorizontal: 10,
-      justifyContent: 'center',
-      borderBottomLeftRadius: 10,
-      borderBottomRightRadius: 10,
-
-    }}>
-
-      <TouchableOpacity onPress={() => navigation.goBack()} style={{
-        zIndex: 99,
-        height: 70,
-        width: 80,
-        justifyContent: 'center',
-        alignItems: 'center',
-        // padding: 10,
-      }}>
-        <Icon type='ionicon' name='arrow-back-outline' size={24} color={color} />
+      {/* Tombol Kembali */}
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <Icon type="ionicon" name="arrow-back-outline" size={24} color={color} />
       </TouchableOpacity>
 
+      {/* Judul */}
+      <Text style={[styles.title, { color }]}>{title}</Text>
 
-      <Text style={{
-        ...fonts.headline4,
-        flex: 1,
-        textAlign: 'center',
-        marginLeft: -50,
-
-        color: color
-      }}>{title}</Text>
-
-      {icon &&
-        <TouchableOpacity onPress={onPress} style={{
-
-        }}>
+      {/* Ikon tambahan (jika ada) */}
+      {icon && (
+        <TouchableOpacity onPress={onPress} style={styles.iconButton}>
           <Icon name={iconname} size={20} color={color} />
         </TouchableOpacity>
-      }
-    </View>
+      )}
 
+    </View>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    justifyContent: 'space-between',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  backButton: {
+    height: 70,
+    width: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    ...fonts.headline4,
+    flex: 1,
+    marginLeft: -40,
+    textAlign: 'center',
+  },
+  iconButton: {
+    padding: 10,
+  },
+});

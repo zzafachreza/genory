@@ -32,6 +32,7 @@ import {
   VideoDetail,
   Calculator,
   CalculatorHasil,
+  LihatYoutube,
 
 
 
@@ -66,6 +67,14 @@ export default function Router() {
       <Stack.Screen
         name="Splash"
         component={Splash}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="LihatYoutube"
+        component={LihatYoutube}
         options={{
           headerShown: false,
         }}

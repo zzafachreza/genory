@@ -1,358 +1,170 @@
-import { View, Text, TouchableNativeFeedback, ScrollView, Image, TouchableWithoutFeedback } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { View, Text, ScrollView, Pressable, FlatList, StatusBar } from 'react-native';
+import FastImage from 'react-native-fast-image';
+import axios from 'axios';
+import { useIsFocused } from '@react-navigation/native';
 import { MyHeader } from '../../components';
 import { Color, colors, fonts, windowWidth } from '../../utils';
-import axios from 'axios';
 import { apiURL, getData, webURL } from '../../utils/localStorage';
-import { FlatList } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
 
 export default function Telusuri({ navigation }) {
-
   const [data, setData] = useState([]);
-  const isFocus = useIsFocused();
   const [user, setUser] = useState({});
-  useEffect(() => {
-    if (isFocus) {
-      getData('user').then(u => {
-        setUser(u);
-        axios.post(apiURL + 'artikel', {
-          tipe: u.tipe
-        }).then(res => {
-          console.log(res.data.filter(i => i.kategori == 'Banner'));
+  const isFocused = useIsFocused();
 
-          setData(res.data);
-        })
-      })
+  useEffect(() => {
+    let isMounted = true;
+    if (isFocused) {
+      getData('user').then((u) => {
+        if (isMounted) {
+          setUser(u);
+          axios
+            .post(apiURL + 'artikel', { tipe: u.tipe })
+            .then((res) => isMounted && setData(res.data));
+        }
+      });
     }
-  }, [isFocus])
-  // Daftar kategori
-  const categories = [
+    return () => { isMounted = false; };
+  }, [isFocused]);
+
+  const categories = useMemo(() => [
     { id: 1, name: 'Latihan', color: Color.blueGray[100] },
     { id: 2, name: 'Latihan', color: Color.blueGray[100] },
     { id: 3, name: 'Latihan', color: Color.blueGray[100] },
-    { id: 4, name: 'Latihan', color: Color.blueGray[100] },
-    { id: 5, name: 'Latihan', color: Color.blueGray[100] },
-  ];
+  ], []);
 
-  const rekomendasi = [
+  const rekomendasi = useMemo(() => [
     { id: 1, name: 'Menaikkan Berat Badan', color: Color.blueGray[100] },
     { id: 2, name: 'Artikel', color: Color.blueGray[100] },
     { id: 3, name: 'Latihan', color: Color.blueGray[100] },
     { id: 4, name: 'Rekomendasi Makanan Sehat', color: Color.blueGray[100] },
-  ];
+  ], []);
+
+  const renderItem = useCallback(({ item }) => (
+    <Pressable onPress={() => navigation.navigate('FaktaMitos', item)}>
+      <View style={styles.card}>
+        <FastImage source={{ uri: webURL + item.file_artikel }} style={styles.image} />
+        <Text style={styles.overlayText}>{item.judul}</Text>
+      </View>
+    </Pressable>
+  ), []);
 
 
+  const renderItemBanner = useCallback(({ item }) => (
+    <Pressable onPress={() => navigation.navigate('FaktaMitos', item)}>
+      <View style={styles.card}>
+        <FastImage source={{ uri: webURL + item.file_artikel }} style={styles.imageBanner} />
+        <Text style={styles.overlayTextBanner}>{item.judul}</Text>
+      </View>
+    </Pressable>
+  ), []);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: colors.white,
-      }}
-    >
-      {/* Header */}
-      <View>
-        <MyHeader title="Telusuri" />
-      </View>
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+      <MyHeader title="Telusuri" />
 
-      {/* ScrollView untuk konten */}
-      <ScrollView>
-        <View
-          style={{
-            padding: 10,
-          }}
-        >
-          {/* CATEGORY */}
-          <View>
-            {/* Menghilangkan indikator scroll dengan showsHorizontalScrollIndicator={false} */}
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                }}
-              >
-                {categories.map((category) => (
-                  <TouchableNativeFeedback
-                    key={category.id}
-                    onPress={() => console.log(`Navigasi ke ${category.name}`)}
-                  >
-                    <View
-                      style={{
-                        backgroundColor: category.color,
-                        padding: 10,
-                        borderRadius: 20,
-                        marginRight: 10,
-                        alignItems: 'center',
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <CategoryList categories={categories} />
 
-                        width: 83,
-                        height: 35
-                      }}
-                    >
-                      <Text
-                        style={{
-                          color: colors.black,
-                          fontSize: 12,
-                          fontFamily: fonts.primary[600],
-                        }}
-                      >
-                        {category.name}
-                      </Text>
-                    </View>
-                  </TouchableNativeFeedback>
-                ))}
-              </View>
-            </ScrollView>
+        <Section title="Banner">
+          <FlatList
+            data={data.filter(i => i.kategori === 'Banner')}
+            renderItem={renderItemBanner}
+            horizontal
+            keyExtractor={(item) => item.id_artikel.toString()}
+            showsHorizontalScrollIndicator={false}
+            initialNumToRender={3}
+          />
+        </Section>
+
+        <Section title="Mitos Atau Fakta?" color={user.tipe === 'Gain' ? colors.primary : colors.secondary}>
+          <FlatList
+            data={data.filter(i => i.kategori === 'Mitos atau Fakta')}
+            renderItem={renderItem}
+            horizontal
+            keyExtractor={(item) => item.id_artikel.toString()}
+            showsHorizontalScrollIndicator={false}
+          />
+        </Section>
+
+        <Section title="Rekomendasi Makanan Sehat">
+          <FlatList
+            data={data.filter(i => i.kategori === 'Rekomendasi Makanan Sehat')}
+            renderItem={renderItem}
+            horizontal
+            keyExtractor={(item) => item.id_artikel.toString()}
+            showsHorizontalScrollIndicator={false}
+          />
+        </Section>
+
+        <Section title="Asupan Kalori Tambahan">
+          <FlatList
+            data={data.filter(i => i.kategori === 'Asupan Kalori Tambahan')}
+            renderItem={renderItem}
+            horizontal
+            keyExtractor={(item) => item.id_artikel.toString()}
+            showsHorizontalScrollIndicator={false}
+          />
+        </Section>
+
+        <Section title="Rekomendasi">
+          <View style={styles.recommendationContainer}>
+            {rekomendasi.map((item) => (
+              <Pressable key={item.id} onPress={() => console.log(`Navigasi ke ${item.name}`)}>
+                <View style={[styles.recommendationBox, { backgroundColor: item.color }]}>
+                  <Text style={styles.recommendationText}>{item.name}</Text>
+                </View>
+              </Pressable>
+            ))}
           </View>
-
-          {/* SCROLL GALLERY (Gambar) */}
-          <View style={{ marginTop: 20 }}>
-            <FlatList showsHorizontalScrollIndicator={false} horizontal data={data.filter(i => i.kategori == 'Banner')} renderItem={({ item, index }) => {
-              return (
-                <TouchableWithoutFeedback onPress={() => navigation.navigate('FaktaMitos', item)}>
-                  <View
-                    // key={item.id_artikel}
-                    style={{
-                      marginRight: 10,
-                      borderRadius: 8,
-                      overflow: 'hidden',
-                    }}
-                  >
-                    <Image
-                      source={{
-                        uri: webURL + item.file_artikel
-                      }}
-                      style={{
-                        width: windowWidth - 20,
-                        resizeMode: 'contain',
-                        height: 250,
-                        borderRadius: 8,
-                      }}
-                    />
-
-                  </View>
-                </TouchableWithoutFeedback>
-              )
-            }} />
-          </View>
-
-
-          {/* MITOS ATAU FAKTA */}
-          <View style={{
-            marginTop: 20,
-            padding: 10,
-          }}>
-            <Text style={{
-              fontFamily: fonts.primary[600],
-              fontSize: 15,
-              color: user.tipe == 'Gain' ? colors.primary : colors.secondary
-
-            }}>Mitos Atau Fakta?</Text>
-            <FlatList showsHorizontalScrollIndicator={false} horizontal data={data.filter(i => i.kategori == 'Mitos atau Fakta')} renderItem={({ item, index }) => {
-              return (
-                <TouchableWithoutFeedback onPress={() => navigation.navigate('FaktaMitos', item)}>
-                  <View
-                    // key={item.id_artikel}
-                    style={{
-                      marginRight: 10,
-                      borderRadius: 8,
-                      overflow: 'hidden',
-                    }}
-                  >
-                    <Image
-                      source={{
-                        uri: webURL + item.file_artikel
-                      }}
-                      style={{
-                        width: 160,
-
-                        height: 200,
-                        borderRadius: 8,
-                      }}
-                    />
-                    <Text style={{
-                      width: 160,
-                      height: 70,
-                      maxWidth: 160,
-                      position: 'absolute',
-                      bottom: 0,
-                      // margin: 4,
-                      color: colors.white,
-                      padding: 4,
-                      backgroundColor: '#00000080'
-                    }}>{item.judul}</Text>
-
-                  </View>
-                </TouchableWithoutFeedback>
-              )
-            }} />
-          </View>
-
-          {/* MAKANAN SEHAT */}
-
-          <View style={{
-            marginTop: 20,
-            padding: 10,
-          }}>
-            <Text style={{
-              fontFamily: fonts.primary[600],
-              fontSize: 15,
-              color: user.tipe == 'Gain' ? colors.primary : colors.secondary
-
-            }}>Rekomendasi{'\n'}
-              Makanan Sehat
-
-            </Text>
-            <FlatList showsHorizontalScrollIndicator={false} horizontal data={data.filter(i => i.kategori == 'Rekomendasi Makanan Sehat')} renderItem={({ item, index }) => {
-              return (
-                <TouchableWithoutFeedback onPress={() => navigation.navigate('FaktaMitos', item)}>
-                  <View
-                    // key={item.id_artikel}
-                    style={{
-                      marginRight: 10,
-                      borderRadius: 8,
-                      overflow: 'hidden',
-                    }}
-                  >
-                    <Image
-                      source={{
-                        uri: webURL + item.file_artikel
-                      }}
-                      style={{
-                        width: 160,
-                        height: 200,
-                        borderRadius: 8,
-                      }}
-                    />
-                    <Text style={{
-                      width: 160,
-                      height: 70,
-                      maxWidth: 160,
-                      position: 'absolute',
-                      bottom: 0,
-                      // margin: 4,
-                      color: colors.white,
-                      padding: 4,
-                      backgroundColor: '#00000080'
-                    }}>{item.judul}</Text>
-
-                  </View>
-                </TouchableWithoutFeedback>
-              )
-            }} />
-          </View>
-
-
-          {/* ASUPAN KALORI TAMBAHAN */}
-          <View style={{
-            marginTop: 20,
-            padding: 10,
-          }}>
-            <Text style={{
-              fontFamily: fonts.primary[600],
-              fontSize: 15,
-              color: user.tipe == 'Gain' ? colors.primary : colors.secondary
-
-            }}>Asupan Kalori{'\n'}
-              Tambahan
-
-            </Text>
-            <FlatList showsHorizontalScrollIndicator={false} horizontal data={data.filter(i => i.kategori == 'Asupan Kalori Tambahan')} renderItem={({ item, index }) => {
-              return (
-                <TouchableWithoutFeedback onPress={() => navigation.navigate('FaktaMitos', item)}>
-                  <View
-                    // key={item.id_artikel}
-                    style={{
-                      marginRight: 10,
-                      borderRadius: 8,
-                      overflow: 'hidden',
-                    }}
-                  >
-                    <Image
-                      source={{
-                        uri: webURL + item.file_artikel
-                      }}
-                      style={{
-                        width: 160,
-                        height: 200,
-                        borderRadius: 8,
-                      }}
-                    />
-                    <Text style={{
-                      width: 160,
-                      height: 70,
-                      maxWidth: 160,
-                      position: 'absolute',
-                      bottom: 0,
-                      // margin: 4,
-                      color: colors.white,
-                      padding: 4,
-                      backgroundColor: '#00000080'
-                    }}>{item.judul}</Text>
-
-                  </View>
-                </TouchableWithoutFeedback>
-              )
-            }} />
-          </View>
-
-
-          {/* REKOMENDASI */}
-          <View style={{
-            padding: 10
-          }}>
-
-
-            <Text style={{
-              fontFamily: fonts.primary[600],
-              fontSize: 15,
-              color: user.tipe == 'Gain' ? colors.primary : colors.secondary
-
-            }}>Rekomendasi</Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                flexWrap: 'wrap'
-              }}
-            >
-              {rekomendasi.map((rekomendasi) => (
-                <TouchableNativeFeedback
-                  key={rekomendasi.id}
-                  onPress={() => console.log(`Navigasi ke ${rekomendasi.name}`)}
-                >
-                  <View
-                    style={{
-                      backgroundColor: rekomendasi.color,
-                      padding: 10,
-                      borderRadius: 20,
-                      marginRight: 10,
-                      alignItems: 'center',
-
-                      marginTop: 10,
-
-                    }}
-                  >
-                    <Text
-                      style={{
-                        color: colors.black,
-                        fontSize: 12,
-                        fontFamily: fonts.primary[600],
-                      }}
-                    >
-                      {rekomendasi.name}
-                    </Text>
-                  </View>
-                </TouchableNativeFeedback>
-              ))}
-            </View>
-
-          </View>
-          <View>
-
-          </View>
-
-        </View>
+        </Section>
       </ScrollView>
     </View>
   );
 }
+
+const CategoryList = ({ categories }) => (
+  <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryList}>
+    {categories.map((category) => (
+      <Pressable key={category.id} onPress={() => console.log(`Navigasi ke ${category.name}`)}>
+        <View style={[styles.categoryItem, { backgroundColor: category.color }]}>
+          <Text style={styles.categoryText}>{category.name}</Text>
+        </View>
+      </Pressable>
+    ))}
+  </ScrollView>
+);
+
+const Section = ({ title, children, color }) => (
+  <View style={styles.section}>
+    <Text style={[styles.sectionTitle, { color: color || colors.black }]}>{title}</Text>
+    {children}
+  </View>
+);
+
+const styles = {
+  container: { flex: 1, backgroundColor: colors.white },
+  scrollContent: { padding: 10 },
+  categoryList: { flexDirection: 'row', marginBottom: 20 },
+  categoryItem: { padding: 10, borderRadius: 20, marginRight: 10, alignItems: 'center', width: 83, height: 35 },
+  categoryText: { color: colors.black, fontSize: 12, fontFamily: fonts.primary[600] },
+  section: { marginTop: 20, padding: 10 },
+  sectionTitle: { fontFamily: fonts.primary[600], fontSize: 15 },
+  recommendationContainer: { flexDirection: 'row', flexWrap: 'wrap' },
+  recommendationBox: { padding: 10, borderRadius: 20, marginRight: 10, marginTop: 10, alignItems: 'center' },
+  recommendationText: { color: colors.black, fontSize: 12, fontFamily: fonts.primary[600] },
+  card: { marginRight: 10, borderRadius: 8, overflow: 'hidden' },
+  image: { width: 160, height: 200, borderRadius: 8 },
+  imageBanner: {
+    width: windowWidth - 40, height: 220, borderRadius: 8
+  },
+  overlayText: {
+    width: 160, height: 70, position: 'absolute', bottom: 0,
+    color: colors.white, padding: 4, backgroundColor: '#00000080'
+  },
+  overlayTextBanner: {
+    width: windowWidth - 40, height: 70, position: 'absolute', bottom: 0,
+    color: colors.white, padding: 4, backgroundColor: '#00000080'
+  },
+};

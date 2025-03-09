@@ -8,6 +8,7 @@ import { useToast } from 'react-native-toast-notifications';
 
 export default function CalculatorHasil({ navigation, route }) {
     const user = route.params.user;
+    console.log(user);
     const item = route.params.item;
 
 
@@ -168,7 +169,7 @@ export default function CalculatorHasil({ navigation, route }) {
                     marginTop: 10,
                     fontSize: 16,
                     fontFamily: fonts.primary[600],
-                    color: user.level == 'Gain' ? colors.primary : colors.secondary
+                    color: user.tipe == 'Gain' ? colors.primary : colors.secondary
                 }}>Kebutuhan Tubuhmu</Text>
 
                 <View style={{
@@ -223,7 +224,7 @@ export default function CalculatorHasil({ navigation, route }) {
                     marginTop: 10,
                     fontSize: 16,
                     fontFamily: fonts.primary[600],
-                    color: user.level == 'Gain' ? colors.primary : colors.secondary
+                    color: user.tipe == 'Gain' ? colors.primary : colors.secondary
                 }}>Kebutuhan Makro Gizi</Text>
                 <View style={{
 

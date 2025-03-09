@@ -27,12 +27,14 @@ import VideoDetail from './Menu/VideoDetail';
 import Login from './register/Login';
 import Calculator from './Menu/Calculator';
 import CalculatorHasil from './Menu/CalculatorHasil';
+import LihatYoutube from './Home/LihatYoutube';
 
 
 
 
 export {
   Splash,
+  LihatYoutube,
   Home,
   Account,
   Login,

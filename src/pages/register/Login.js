@@ -22,6 +22,7 @@ import { color } from 'react-native-reanimated';
 import axios from 'axios';
 import MyLoading from '../../components/MyLoading';
 import { useToast } from 'react-native-toast-notifications';
+import FastImage from 'react-native-fast-image'
 
 export default function Login({ navigation, route }) {
     const TIPE = route.params.tipe;
@@ -104,7 +105,7 @@ export default function Login({ navigation, route }) {
                             alignItems: 'center',
                             marginTop: 0,
                         }}>
-                            <Image style={{
+                            <FastImage resizeMode={FastImage.resizeMode.contain} style={{
                                 width: 332,
                                 height: 280,
                                 resizeMode: 'contain'
@@ -158,7 +159,7 @@ export default function Login({ navigation, route }) {
                                 alignItems: 'center',
                                 marginTop: 0
                             }}>
-                                <Image style={{
+                                <FastImage style={{
                                     width: 100,
                                     height: 49,
                                     resizeMode: 'contain'

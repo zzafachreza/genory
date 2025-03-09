@@ -1,4 +1,4 @@
-import { View, Text, TouchableNativeFeedback, Image, Linking } from 'react-native';
+import { View, Text, TouchableNativeFeedback, Image, Linking, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { colors, fonts } from '../../utils';
 import { MyButton, MyGap, MyHeader, MyInput, MyPicker } from '../../components';
@@ -6,9 +6,12 @@ import axios from 'axios';
 import { apiURL } from '../../utils/localStorage';
 import { useToast } from 'react-native-toast-notifications';
 import MyLoading from '../../components/MyLoading';
+import { Icon } from 'react-native-elements';
+import FastImage from 'react-native-fast-image'
 
 export default function Calculator({ navigation, route }) {
     const user = route.params.user;
+    console.log(user);
 
     const [medsos, setMedsos] = useState({
         whatsapp: '',
@@ -18,9 +21,11 @@ export default function Calculator({ navigation, route }) {
     const __GetMedsos = () => {
         axios.post(apiURL + 'medsos').then(res => {
             console.log(res.data);
-            setMedsos(res.data)
+            setMedsos(res.data);
         })
+
     }
+
     useEffect(() => {
         __GetMedsos();
     }, []);
@@ -113,7 +118,7 @@ export default function Calculator({ navigation, route }) {
     });
 
     const toast = useToast();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     function hitungBMR(jenisKelamin, beratBadan, tinggiBadan, usia) {
         var bmr;
@@ -232,6 +237,12 @@ export default function Calculator({ navigation, route }) {
 
     }
 
+    useEffect(() => {
+        setTimeout(() => {
+            setLoading(false)
+        }, 1000)
+    }, [])
+
     return (
         <View style={{
             flex: 1,
@@ -239,141 +250,187 @@ export default function Calculator({ navigation, route }) {
         }}>
 
             <View>
-                <MyHeader title={route.params.judul} />
-            </View>
-
-            <View style={{
-                flex: 1,
-                padding: 10,
-            }}>
-                <View>
-                    <Text style={{
-                        fontFamily: fonts.primary[700],
-                        fontSize: 20,
-                        color: user.tipe == 'Gain' ? colors.primary : colors.secondary,
-                        textAlign: 'center'
-                    }}>Informasi Utama</Text>
-
-                    <View style={{
-                        marginBottom: 0,
-                        flexDirection: 'row',
-                        alignItems: 'center'
-                    }}>
-                        <View style={{
-                            flex: 1,
-                            paddingRight: 5
-                        }}>
-                            <MyInput borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.berat_badan} onChangeText={x => setKirim({ ...kirim, berat_badan: x })} iconname='speedometer-outline' keyboardType='number-pad' label="Berat Badan" placeholder="kg" />
-                        </View>
-                        <View style={{
-                            flex: 1,
-                            paddingLeft: 5
-                        }}>
-                            <MyInput borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.tinggi_badan} onChangeText={x => setKirim({ ...kirim, tinggi_badan: x })} iconname='body-outline' keyboardType='number-pad' label="Tinggi Badan" placeholder="cm" />
-                        </View>
-                    </View>
-                    <View style={{
-                        marginBottom: 0,
-                        flexDirection: 'row',
-                        alignItems: 'center'
-                    }}>
-                        <View style={{
-                            flex: 1,
-                            paddingRight: 5
-                        }}>
-                            <MyInput borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.usia} onChangeText={x => setKirim({ ...kirim, usia: x })} iconname='person-outline' keyboardType='number-pad' label="Usia" placeholder="tahun" />
-                        </View>
-                        <View style={{
-                            flex: 1,
-                            paddingLeft: 5
-                        }}>
-                            <MyPicker borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.jenis_kelamin} onChange={x => setKirim({
-                                ...kirim,
-                                jenis_kelamin: x
-                            })} label="Jenis Kelamin" data={[
-                                { label: 'Laki-laki', value: 'Laki-laki' },
-                                {
-                                    label: 'Perempuan', value: 'Perempuan'
-                                }
-                            ]} />
-
-                        </View>
-
-                    </View>
-
-                    <MyPicker borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.tujuan} onChange={x => setKirim({
-                        ...kirim,
-                        tujuan: x
-                    })} label="Tujuan Diet" data={TJN_DATA} />
-
-                    <MyPicker borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.aktifitas} onChange={x => setKirim({
-                        ...kirim,
-                        aktifitas: x
-                    })} label="Aktivitas Fisik" data={ACT_DATA} />
-
-                    <MyGap jarak={20} />
-                    {!loading && <MyButton onPress={sendData} warna={user.tipe == 'Gain' ? colors.primary : colors.secondary} Icons="speedometer" iconColor={colors.white} title="Hitung" />}
-
-                    {loading && <View style={{
-                        marginTop: 20,
-                    }}>
-                        <MyLoading color={user.tipe == 'Gain' ? colors.primary : colors.secondary} />
-                    </View>}
-                </View>
-            </View>
-
-            <View style={{
-                padding: 10,
-            }}>
-                <Text style={{
-                    fontFamily: fonts.primary[700],
-                    fontSize: 20,
-                    color: user.tipe == 'Gain' ? colors.primary : colors.secondary,
-                    textAlign: 'center'
-                }}>Ikuti Kami : </Text>
-
-
                 <View style={{
+                    marginTop: 0,
+                    marginHorizontal: 0,
                     flexDirection: 'row',
+                    alignItems: 'center',
+                    backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                    paddingHorizontal: 10,
                     justifyContent: 'center',
-                    alignItems: 'center'
+                    borderBottomLeftRadius: 10,
+                    borderBottomRightRadius: 10,
+
                 }}>
-                    <TouchableNativeFeedback onPress={() => Linking.openURL(medsos.instagram)}>
-                        <View style={{
-                            marginRight: 10,
-                            flexDirection: "row",
-                            justifyContent: 'center',
-                            alignItems: 'center',
 
-                        }}>
-
-                            <Image style={{
-                                width: 24,
-                                height: 24
-                            }} source={require('../../assets/instagram.png')} />
-                            <Text style={{ fontFamily: fonts.primary[600], fontSize: 12, marginLeft: 5, }}>@genory.official</Text>
-                        </View>
-                    </TouchableNativeFeedback>
+                    <TouchableOpacity onPress={() => navigation.replace('MainApp')} style={{
+                        zIndex: 99,
+                        height: 70,
+                        width: 80,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        // padding: 10,
+                    }}>
+                        <Icon type='ionicon' name='arrow-back-outline' size={24} color={colors.white} />
+                    </TouchableOpacity>
 
 
+                    <Text style={{
+                        ...fonts.headline4,
+                        flex: 1,
+                        textAlign: 'center',
+                        marginLeft: -50,
 
-                    <TouchableNativeFeedback onPress={() => Linking.openURL(medsos.tiktok)}>
-                        <View style={{
-                            flexDirection: "row",
-                            justifyContent: 'center',
-                            alignItems: 'center',
+                        color: colors.white
+                    }}>{route.params.judul}</Text>
 
-                        }}>
-
-                            <Image style={{
-                                width: 24,
-                                height: 24
-                            }} source={require('../../assets/tiktok.png')} />
-                            <Text style={{ fontFamily: fonts.primary[600], fontSize: 12, marginLeft: 5, }}>@genory.official</Text>
-                        </View>
-                    </TouchableNativeFeedback>
                 </View>
             </View>
+
+            {!loading &&
+                <>
+                    <View style={{
+                        flex: 1,
+                        padding: 10,
+                    }}>
+                        <View>
+                            <Text style={{
+                                fontFamily: fonts.primary[700],
+                                fontSize: 20,
+                                color: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                                textAlign: 'center'
+                            }}>Informasi Utama</Text>
+
+                            <View style={{
+                                marginBottom: 0,
+                                flexDirection: 'row',
+                                alignItems: 'center'
+                            }}>
+                                <View style={{
+                                    flex: 1,
+                                    paddingRight: 5
+                                }}>
+                                    <MyInput borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.berat_badan} onChangeText={x => setKirim({ ...kirim, berat_badan: x })} iconname='speedometer-outline' keyboardType='number-pad' label="Berat Badan" placeholder="kg" />
+                                </View>
+                                <View style={{
+                                    flex: 1,
+                                    paddingLeft: 5
+                                }}>
+                                    <MyInput borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.tinggi_badan} onChangeText={x => setKirim({ ...kirim, tinggi_badan: x })} iconname='body-outline' keyboardType='number-pad' label="Tinggi Badan" placeholder="cm" />
+                                </View>
+                            </View>
+                            <View style={{
+                                marginBottom: 0,
+                                flexDirection: 'row',
+                                alignItems: 'center'
+                            }}>
+                                <View style={{
+                                    flex: 1,
+                                    paddingRight: 5
+                                }}>
+                                    <MyInput borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.usia} onChangeText={x => setKirim({ ...kirim, usia: x })} iconname='person-outline' keyboardType='number-pad' label="Usia" placeholder="tahun" />
+                                </View>
+                                <View style={{
+                                    flex: 1,
+                                    paddingLeft: 5
+                                }}>
+                                    <MyPicker borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.jenis_kelamin} onChange={x => setKirim({
+                                        ...kirim,
+                                        jenis_kelamin: x
+                                    })} label="Jenis Kelamin" data={[
+                                        { label: 'Laki-laki', value: 'Laki-laki' },
+                                        {
+                                            label: 'Perempuan', value: 'Perempuan'
+                                        }
+                                    ]} />
+
+                                </View>
+
+                            </View>
+
+                            <MyPicker borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.tujuan} onChange={x => setKirim({
+                                ...kirim,
+                                tujuan: x
+                            })} label="Tujuan Diet" data={TJN_DATA} />
+
+                            <MyPicker borderColor={user.tipe == 'Gain' ? colors.primary : colors.secondary} value={kirim.aktifitas} onChange={x => setKirim({
+                                ...kirim,
+                                aktifitas: x
+                            })} label="Aktivitas Fisik" data={ACT_DATA} />
+
+                            <MyGap jarak={20} />
+                            {!loading && <MyButton onPress={sendData} warna={user.tipe == 'Gain' ? colors.primary : colors.secondary} Icons="speedometer" iconColor={colors.white} title="Hitung" />}
+
+                            {loading && <View style={{
+                                marginTop: 20,
+                            }}>
+                                <MyLoading color={user.tipe == 'Gain' ? colors.primary : colors.secondary} />
+                            </View>}
+                        </View>
+                    </View>
+
+                    <View style={{
+                        padding: 10,
+                    }}>
+                        <Text style={{
+                            fontFamily: fonts.primary[700],
+                            fontSize: 20,
+                            color: user.tipe == 'Gain' ? colors.primary : colors.secondary,
+                            textAlign: 'center'
+                        }}>Ikuti Kami : </Text>
+
+
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                            <TouchableNativeFeedback onPress={() => Linking.openURL(medsos.instagram)}>
+                                <View style={{
+                                    marginRight: 10,
+                                    flexDirection: "row",
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+
+                                }}>
+
+                                    <FastImage style={{
+                                        width: 24,
+                                        height: 24
+                                    }} source={require('../../assets/instagram.png')} />
+                                    <Text style={{ fontFamily: fonts.primary[600], fontSize: 12, marginLeft: 5, }}>@genory.official</Text>
+                                </View>
+                            </TouchableNativeFeedback>
+
+
+
+                            <TouchableNativeFeedback onPress={() => Linking.openURL(medsos.tiktok)}>
+                                <View style={{
+                                    flexDirection: "row",
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+
+                                }}>
+
+                                    <FastImage style={{
+                                        width: 24,
+                                        height: 24
+                                    }} source={require('../../assets/tiktok.png')} />
+                                    <Text style={{ fontFamily: fonts.primary[600], fontSize: 12, marginLeft: 5, }}>@genory.official</Text>
+                                </View>
+                            </TouchableNativeFeedback>
+                        </View>
+                    </View>
+                </>
+
+            }
+
+            {loading && <View style={{
+                marginTop: 20,
+                flex: 1,
+            }}>
+                <MyLoading color={user.tipe == 'Gain' ? colors.primary : colors.secondary} />
+            </View>}
         </View>
     );
 }

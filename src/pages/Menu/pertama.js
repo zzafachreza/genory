@@ -1,4 +1,4 @@
-import { View, Text, TouchableNativeFeedback, ScrollView, Image, TextInput, Alert, FlatList, Linking, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableNativeFeedback, ScrollView, Image, TextInput, Alert, FlatList, Linking, TouchableOpacity, Pressable } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { colors, fonts, windowWidth } from '../../utils';
 import { MyHeader } from '../../components';
@@ -21,6 +21,9 @@ import {
   ContributionGraph,
   StackedBarChart
 } from "react-native-chart-kit";
+
+import FastImage from 'react-native-fast-image'
+
 
 export default function ProgramPertama({ navigation, route }) {
   const week = route.params.week; // Default ke minggu pertama jika tidak ada parameter
@@ -140,12 +143,6 @@ export default function ProgramPertama({ navigation, route }) {
   }
 
   useEffect(() => {
-
-
-
-
-
-
     getData('plan').then(p => {
       if (!p) {
         setUserInput('');
@@ -157,24 +154,18 @@ export default function ProgramPertama({ navigation, route }) {
     if (isFocus) {
       __getIMT();
       __getProduk();
-
       __getVideo();
 
     }
 
     // Atur minggu sesuai parameter yang diterima
-
   }, [isFocus]);
 
 
   const [BOLEH_LIHAT, setBOLEH_LIHAT] = useState(0);
   // const HARI_SEBERAHA =  ;
 
-  // Fungsi untuk mengganti konten berdasarkan minggu
-  const handleWeekChange = (week) => {
-    setCurrentWeek(week);
-    setCurrentContent(week === 1 ? 'Konten untuk Minggu Pertama' : 'Konten untuk Minggu Kedua');
-  };
+
 
   const days = currentWeek === 1
     ? Array.from({ length: 7 }, (_, i) => i + 1) // Days 1-7 for Week 1
@@ -205,7 +196,7 @@ export default function ProgramPertama({ navigation, route }) {
   const _renderItem = ({ item, index }) => {
     return (
 
-      <TouchableWithoutFeedback onPress={() => {
+      <Pressable onPress={() => {
         console.log(BOLEH_LIHAT);
 
 
@@ -216,17 +207,14 @@ export default function ProgramPertama({ navigation, route }) {
         })
       }}>
         <View style={{
-          // marginBottom: 10,
           width: 300,
           height: 190,
-          // borderWidth: 1,
           overflow: 'hidden',
           borderRadius: 10,
         }}>
-          <Image style={{
+          <FastImage style={{
             width: 300,
             height: 190,
-            // borderRadius: 10,
           }} source={{
             uri: `https://i.ytimg.com/vi/${item.youtube}/hq720.jpg`
           }} />
@@ -268,7 +256,7 @@ export default function ProgramPertama({ navigation, route }) {
 
           }
         </View>
-      </TouchableWithoutFeedback >
+      </Pressable >
 
     );
   }
@@ -277,7 +265,10 @@ export default function ProgramPertama({ navigation, route }) {
     <View style={{ flex: 1, backgroundColor: colors.white }}>
       <MyHeader title={`${currentWeek} Minggu Bersama Genory `} />
 
-      <ScrollView>
+      <ScrollView
+        removeClippedSubviews={true} // Hapus elemen yang tidak terlihat dari memori
+        showsVerticalScrollIndicator={false}
+      >
 
         {/* pengingat */}
         <View style={{ padding: 10 }}>
@@ -325,11 +316,12 @@ export default function ProgramPertama({ navigation, route }) {
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: "flex-start" }}>
                 <ScrollView
                   horizontal
+                  removeClippedSubviews={true} //
                   showsHorizontalScrollIndicator={false}
                   style={{ marginTop: 10 }}
                 >
                   {currentWeek === 2 && (
-                    <TouchableNativeFeedback onPress={() => {
+                    <Pressable onPress={() => {
 
                       setCurrentWeek(1)
                       filterVideo(moment(mulai).add(0, 'day').format('YYYY-MM-DD'));
@@ -338,7 +330,7 @@ export default function ProgramPertama({ navigation, route }) {
                     }}>
                       <View
                         style={{
-                          height: 61, // Ukuran tombol Minggu ke 1
+                          height: 70, // Ukuran tombol Minggu ke 1
                           width: 70, // Lebar tombol diatur secara independen
                           backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
                           borderRadius: 10,
@@ -367,7 +359,7 @@ export default function ProgramPertama({ navigation, route }) {
                           1
                         </Text>
                       </View>
-                    </TouchableNativeFeedback>
+                    </Pressable>
                   )}
                   {days.map((day) => {
                     const dayAbsolute = currentWeek === 1 ? day : day + 7; // Map day to absolute day
@@ -375,7 +367,7 @@ export default function ProgramPertama({ navigation, route }) {
                     let TANGGAL = moment(mulai).add(day - 1, 'day').format('DD/MM/YY');
                     let TANGGAL_DATA = moment(mulai).add(day - 1, 'day').format('YYYY-MM-DD');
                     return (
-                      <TouchableWithoutFeedback onPress={() => {
+                      <Pressable onPress={() => {
 
                         if (moment().format('YYYY-MM-DD') >= moment(TANGGAL_DATA).format('YYYY-MM-DD')) {
                           filterVideo(TANGGAL_DATA);
@@ -397,7 +389,7 @@ export default function ProgramPertama({ navigation, route }) {
                             borderRadius: 10,
                             marginRight: 10,
                             alignItems: 'center',
-                            width: 42,
+                            width: 50,
                             marginBottom: 10, // Add space for better visibility
                             // Shadow properties
                             elevation: 8, // Android shadow
@@ -406,7 +398,7 @@ export default function ProgramPertama({ navigation, route }) {
                             shadowOpacity: 0.3, // iOS shadow opacity
                             shadowRadius: 4.65, // iOS shadow radius
                             zIndex: 1, // Ensure it's above other element,
-                            height: 62
+                            height: 70
                           }}
                         >
                           <Text
@@ -433,12 +425,12 @@ export default function ProgramPertama({ navigation, route }) {
                           <Text style={{
                             fontSize: 5,
                             position: 'absolute',
-                            bottom: 0,
+                            bottom: 4,
                             fontFamily: fonts.primary[400],
                             color: colors.white
                           }}>{mulai.length > 0 ? TANGGAL : ''}</Text>
                         </View>
-                      </TouchableWithoutFeedback>
+                      </Pressable>
                     );
                   })}
                   {currentWeek === 1 && (
@@ -449,7 +441,7 @@ export default function ProgramPertama({ navigation, route }) {
                     }}>
                       <View
                         style={{
-                          height: 61, // Ukuran tombol Minggu ke 2
+                          height: 70, // Ukuran tombol Minggu ke 2
                           width: 70, // Lebar tombol diatur secara independen
                           backgroundColor: user.tipe == 'Gain' ? colors.primary : colors.secondary,
                           borderRadius: 10,
@@ -496,7 +488,7 @@ export default function ProgramPertama({ navigation, route }) {
                 padding: 20,
               }}
             >
-              <Image
+              <FastImage
                 style={{
                   width: 350,
                   height: 200,
@@ -825,7 +817,7 @@ export default function ProgramPertama({ navigation, route }) {
 
                         {/* PRODUK */}
                         <View>
-                          <Image style={{
+                          <FastImage style={{
                             width: 100,
                             height: 100
                           }} source={{

@@ -8,6 +8,7 @@ import { showMessage } from 'react-native-flash-message'
 import { useEffect } from 'react'
 import axios from 'axios'
 import { apiURL } from '../../utils/localStorage'
+import FastImage from 'react-native-fast-image'
 
 export default function KeduaNextSlide({ navigation }) {
     const [selectedProgram, setSelectedProgram] = useState(null); // State untuk menyimpan program yang dipilih
@@ -110,7 +111,7 @@ export default function KeduaNextSlide({ navigation }) {
                             alignItems: 'center',
                             marginTop: 0,
                         }}>
-                            <Image style={{
+                            <FastImage style={{
                                 width: 254,
                                 height: 387,
                                 top: -10
@@ -164,7 +165,7 @@ export default function KeduaNextSlide({ navigation }) {
                                 alignItems: 'center',
                                 marginTop: 20
                             }}>
-                                <Image style={{
+                                <FastImage style={{
                                     width: 73,
                                     height: 29,
                                 }} source={require('../../assets/genory.png')} />
@@ -191,21 +192,21 @@ export default function KeduaNextSlide({ navigation }) {
                                 }}>
 
                                     <TouchableOpacity onPress={() => Linking.openURL(medsos.instagram)}>
-                                        <Image
+                                        <FastImage
                                             style={{ width: 24, height: 24 }}
                                             source={require('../../assets/instagram.png')}
                                         />
                                     </TouchableOpacity>
 
                                     <TouchableOpacity onPress={() => Linking.openURL(medsos.whatsapp)}>
-                                        <Image
+                                        <FastImage
                                             style={{ width: 24, height: 24 }}
                                             source={require('../../assets/WA.png')}
                                         />
                                     </TouchableOpacity>
 
                                     <TouchableOpacity onPress={() => Linking.openURL(medsos.tiktok)}>
-                                        <Image
+                                        <FastImage
                                             style={{ width: 24, height: 24 }}
                                             source={require('../../assets/tiktok.png')}
                                         />

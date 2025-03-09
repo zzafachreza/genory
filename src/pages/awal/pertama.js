@@ -6,7 +6,7 @@ import moment from 'moment';
 import axios from 'axios';
 import { apiURL } from '../../utils/localStorage';
 
-
+import FastImage from 'react-native-fast-image'
 export default function PertamaNextSlide({ navigation }) {
 
 
@@ -69,7 +69,7 @@ export default function PertamaNextSlide({ navigation }) {
                         <View style={{
                             alignItems: "center"
                         }}>
-                            <Image style={{
+                            <FastImage style={{
                                 width: 123,
                                 height: 49
                             }} source={require('../../assets/genory.png')} />
@@ -79,7 +79,7 @@ export default function PertamaNextSlide({ navigation }) {
                             alignItems: 'center',
                             marginTop: 0,
                         }}>
-                            <Image style={{
+                            <FastImage style={{
                                 width: 218,
                                 height: 325,
                                 top: 5
@@ -139,7 +139,7 @@ export default function PertamaNextSlide({ navigation }) {
                                 alignItems: 'center',
                                 marginTop: 20
                             }}>
-                                <Image style={{
+                                <FastImage style={{
                                     width: 73,
                                     height: 29,
                                 }} source={require('../../assets/genory.png')} />
@@ -166,21 +166,21 @@ export default function PertamaNextSlide({ navigation }) {
                                 }}>
 
                                     <TouchableOpacity onPress={() => Linking.openURL(medsos.instagram)}>
-                                        <Image
+                                        <FastImage
                                             style={{ width: 24, height: 24 }}
                                             source={require('../../assets/instagram.png')}
                                         />
                                     </TouchableOpacity>
 
                                     <TouchableOpacity onPress={() => Linking.openURL(medsos.whatsapp)}>
-                                        <Image
+                                        <FastImage
                                             style={{ width: 24, height: 24 }}
                                             source={require('../../assets/WA.png')}
                                         />
                                     </TouchableOpacity>
 
                                     <TouchableOpacity onPress={() => Linking.openURL(medsos.tiktok)}>
-                                        <Image
+                                        <FastImage
                                             style={{ width: 24, height: 24 }}
                                             source={require('../../assets/tiktok.png')}
                                         />

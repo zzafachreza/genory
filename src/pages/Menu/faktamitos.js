@@ -5,6 +5,7 @@ import { MyHeader } from '../../components';
 import { Image } from 'react-native';
 import { webURL } from '../../utils/localStorage';
 import RenderHTML from 'react-native-render-html';
+import FastImage from 'react-native-fast-image';
 
 export default function FaktaMitos({ navigation, route }) {
     const item = route.params;
@@ -28,7 +29,7 @@ export default function FaktaMitos({ navigation, route }) {
                     color: colors.black,
                     marginBottom: 10,
                 }}>{item.judul}</Text>
-                <Image
+                <FastImage
                     source={{
                         uri: webURL + item.file_artikel
                     }}

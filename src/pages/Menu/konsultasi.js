@@ -4,6 +4,7 @@ import { colors, fonts } from '../../utils';
 import { MyHeader } from '../../components';
 import axios from 'axios';
 import { apiURL } from '../../utils/localStorage';
+import FastImage from 'react-native-fast-image';
 
 export default function Konsultasi() {
 
@@ -41,7 +42,7 @@ export default function Konsultasi() {
                     <View style={{
                         alignItems: 'center'
                     }}>
-                        <Image style={{
+                        <FastImage style={{
                             width: 253,
                             height: 255,
                         }} source={require('../../assets/WA.png')} />
@@ -80,7 +81,7 @@ export default function Konsultasi() {
                         marginTop: 20
                     }}>
 
-                        <Image style={{
+                        <FastImage style={{
                             width: 24,
                             height: 24
                         }} source={require('../../assets/instagram.png')} />
@@ -98,7 +99,7 @@ export default function Konsultasi() {
                         marginTop: 10
                     }}>
 
-                        <Image style={{
+                        <FastImage style={{
                             width: 24,
                             height: 24
                         }} source={require('../../assets/tiktok.png')} />

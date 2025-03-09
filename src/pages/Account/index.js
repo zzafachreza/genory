@@ -10,6 +10,7 @@ import {
     ActivityIndicator,
     FlatList,
     TouchableWithoutFeedback,
+    Pressable,
 } from 'react-native';
 import { windowWidth, fonts, MyDimensi } from '../../utils/fonts';
 import { apiURL, getData, MYAPP, storeData, urlAPI, urlApp, urlAvatar } from '../../utils/localStorage';
@@ -30,6 +31,7 @@ import {
     ContributionGraph,
     StackedBarChart
 } from "react-native-chart-kit";
+import FastImage from 'react-native-fast-image';
 
 
 export default function ({ navigation, route }) {
@@ -120,9 +122,9 @@ export default function ({ navigation, route }) {
             justifyContent: 'center',
             alignItems: 'center',
         }}>
-            <FlatList horizontal data={DATA} renderItem={({ item, index }) => {
+            <FlatList removeClippedSubviews horizontal data={DATA} renderItem={({ item, index }) => {
                 return <View style={{
-                    // backgroundColor: 'red',
+
                     width: (windowWidth / 40) - 0.5,
                 }}>
 
@@ -191,7 +193,7 @@ export default function ({ navigation, route }) {
 
     const MyList = ({ label, value, back, onPress }) => {
         return (
-            <TouchableWithoutFeedback onPress={onPress}>
+            <Pressable onPress={onPress}>
                 <View
                     style={{
                         marginVertical: Math.round(windowWidth / 22) / 3,
@@ -239,7 +241,7 @@ export default function ({ navigation, route }) {
                         </Text>
                     </View>
                 </View>
-            </TouchableWithoutFeedback>
+            </Pressable>
         )
     }
     return (
@@ -257,7 +259,7 @@ export default function ({ navigation, route }) {
             }}>
                 <ActivityIndicator size="large" color={colors.primary} />
             </View>}
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView removeClippedSubviews={true} showsVerticalScrollIndicator={false}>
                 {open &&
 
                     <View style={{
@@ -282,7 +284,7 @@ export default function ({ navigation, route }) {
                                 alignItems: 'center'
                             }}>
 
-                                <Image source={{
+                                <FastImage source={{
                                     uri: user.file_pengguna
                                 }} style={{
                                     width: 55,
@@ -441,7 +443,7 @@ export default function ({ navigation, route }) {
                             color: user.tipe == 'Gain' ? colors.primary : colors.secondary,
                         }}>Hasil Rencana Kamu</Text>
                         {mulai.length > 0 && <Text style={{ fontSize: 11, fontFamily: fonts.primary[400] }}>{moment(mulai).format('DD MMM YYYY') + ' - ' + moment(mulai).add(13, 'day').format('DD MMM YYYY')}</Text>}
-                        <FlatList horizontal persistentScrollbar={true} showsHorizontalScrollIndicator={true} data={plan} renderItem={({ item, index }) => {
+                        <FlatList removeClippedSubviews horizontal persistentScrollbar={true} showsHorizontalScrollIndicator={true} data={plan} renderItem={({ item, index }) => {
 
                             let MYBACK = user.tipe == 'Gain' ? colors.primary : colors.secondary;
                             return (
