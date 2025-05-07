@@ -96,7 +96,7 @@ export default function Home({ navigation }) {
 
           <View style={styles.carouselContainer}>
             <Text style={[styles.programText, { color: user.tipe === 'Gain' ? colors.primary : colors.secondary }]}>
-              Program Weight Gain with Genory
+              Program Weight {user.tipe == 'Gain' ? 'Gain' : 'Loss'} with Genory
             </Text>
             <Carousel
               loop
@@ -112,7 +112,7 @@ export default function Home({ navigation }) {
 
         <View style={styles.content}>
           <Text style={styles.description}>
-            Siap menaikkan berat badan dengan cara yang sehat dan efektif? Dengan program Weight Gain dari Genory, kamu akan dipandu untuk mencapai berat badan ideal melalui langkah-langkah praktis dan bimbingan yang mudah diikuti.
+            Siap menaikkan berat badan dengan cara yang sehat dan efektif? Dengan program Weight {user.tipe == 'Gain' ? 'Gain' : 'Loss'} dari Genory, kamu akan dipandu untuk mencapai berat badan ideal melalui langkah-langkah praktis dan bimbingan yang mudah diikuti.
           </Text>
 
           <Text style={[styles.targetText, { color: user.tipe === 'Gain' ? colors.primary : colors.secondary }]}>

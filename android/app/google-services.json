@@ -587,6 +587,35 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:287633538505:android:75efc8254ba6c6d9e3bc18",
+        "android_client_info": {
+          "package_name": "com.withgenory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "287633538505-3q87riqol0g181b3vacq3bfb0396fn4h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCu6lJ3DeYefLEfSlSNXRyqghoT21fESyU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "287633538505-3q87riqol0g181b3vacq3bfb0396fn4h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:287633538505:android:e980cd5b78bc9202e3bc18",
         "android_client_info": {
           "package_name": "com.youthology"

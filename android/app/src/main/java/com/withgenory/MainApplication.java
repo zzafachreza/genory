@@ -1,4 +1,4 @@
-package com.genory;
+package com.withgenory;
 
 import android.app.Application;
 import android.content.Context;

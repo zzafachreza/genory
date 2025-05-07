@@ -65,7 +65,7 @@ export default function Telusuri({ navigation }) {
       <MyHeader title="Telusuri" />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <CategoryList categories={categories} />
+
 
         <Section title="Banner">
           <FlatList
@@ -75,6 +75,7 @@ export default function Telusuri({ navigation }) {
             keyExtractor={(item) => item.id_artikel.toString()}
             showsHorizontalScrollIndicator={false}
             initialNumToRender={3}
+            ListEmptyComponent={<Text style={styles.emptyText}>Belum ada konten</Text>}
           />
         </Section>
 
@@ -85,6 +86,7 @@ export default function Telusuri({ navigation }) {
             horizontal
             keyExtractor={(item) => item.id_artikel.toString()}
             showsHorizontalScrollIndicator={false}
+            ListEmptyComponent={<Text style={styles.emptyText}>Belum ada konten</Text>}
           />
         </Section>
 
@@ -95,6 +97,7 @@ export default function Telusuri({ navigation }) {
             horizontal
             keyExtractor={(item) => item.id_artikel.toString()}
             showsHorizontalScrollIndicator={false}
+            ListEmptyComponent={<Text style={styles.emptyText}>Belum ada konten</Text>}
           />
         </Section>
 
@@ -105,36 +108,17 @@ export default function Telusuri({ navigation }) {
             horizontal
             keyExtractor={(item) => item.id_artikel.toString()}
             showsHorizontalScrollIndicator={false}
+            ListEmptyComponent={<Text style={styles.emptyText}>Belum ada konten</Text>}
           />
         </Section>
 
-        <Section title="Rekomendasi">
-          <View style={styles.recommendationContainer}>
-            {rekomendasi.map((item) => (
-              <Pressable key={item.id} onPress={() => console.log(`Navigasi ke ${item.name}`)}>
-                <View style={[styles.recommendationBox, { backgroundColor: item.color }]}>
-                  <Text style={styles.recommendationText}>{item.name}</Text>
-                </View>
-              </Pressable>
-            ))}
-          </View>
-        </Section>
+
       </ScrollView>
     </View>
   );
 }
 
-const CategoryList = ({ categories }) => (
-  <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryList}>
-    {categories.map((category) => (
-      <Pressable key={category.id} onPress={() => console.log(`Navigasi ke ${category.name}`)}>
-        <View style={[styles.categoryItem, { backgroundColor: category.color }]}>
-          <Text style={styles.categoryText}>{category.name}</Text>
-        </View>
-      </Pressable>
-    ))}
-  </ScrollView>
-);
+
 
 const Section = ({ title, children, color }) => (
   <View style={styles.section}>
@@ -166,5 +150,12 @@ const styles = {
   overlayTextBanner: {
     width: windowWidth - 40, height: 70, position: 'absolute', bottom: 0,
     color: colors.white, padding: 4, backgroundColor: '#00000080'
+  },
+  emptyText: {
+    textAlign: 'center',
+    fontSize: 14,
+    fontFamily: fonts.primary[600],
+    color: colors.gray,
+    marginVertical: 10,
   },
 };

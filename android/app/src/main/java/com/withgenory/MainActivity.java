@@ -1,4 +1,4 @@
-package com.genory;
+package com.withgenory;
 
 import com.facebook.react.ReactActivity;
 
